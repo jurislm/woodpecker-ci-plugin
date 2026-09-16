@@ -20,6 +20,7 @@
         "developerName": "JurisLM",
         "category": "Developer tools",
         "capabilities": ["Read", "Write"],
+        "composerIcon": "./assets/woodpecker_ci.svg",
         "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin"
       }
     }

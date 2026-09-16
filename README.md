@@ -84,6 +84,10 @@ Validate the portable Plugin package with:
 bun run manifest:check
 ```
 
+For local Codex marketplace testing, add the repository marketplace at
+`.agents/plugins/marketplace.json`, then install `woodpecker-ci` from the
+`jurislm-woodpecker` marketplace.
+
 ## Security
 
 Tokens are sent only as bearer authentication and are not included in logs or

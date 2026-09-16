@@ -1,6 +1,6 @@
 {
   "name": "@jurislm/woodpecker-ci-plugin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Local stdio MCP server for Woodpecker CI",
   "type": "module",
   "bin": {
@@ -13,10 +13,14 @@
     "plugin.json",
     "mcp.json",
     ".codex-plugin",
+    ".mcp.json",
+    ".app.json",
     ".mcp.json.example",
     ".app.json.example",
     "skills",
-    "assets"
+    "assets",
+    "contracts",
+    "schemas"
   ],
   "engines": {
     "bun": ">=1.1.0"
@@ -33,7 +37,7 @@
     "test": "bun test --path-ignore-patterns dist",
     "api:fetch": "bun scripts/update-openapi.ts",
     "api:generate": "bun scripts/generate-openapi.ts",
-    "api:check": "bun run api:generate && git diff --exit-code -- openapi src/generated",
+    "api:check": "bun run api:generate && git diff --exit-code -- openapi src/generated contracts",
     "smoke:read": "bun scripts/smoke-read.ts",
     "smoke:stdio": "bun scripts/smoke-stdio.ts",
     "manifest:fetch": "bun scripts/update-agent-plugin-schemas.ts",

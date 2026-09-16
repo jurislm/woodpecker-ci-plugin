@@ -1,0 +1,2671 @@
+{
+  "contractVersion": "1.0.0",
+  "package": "@jurislm/woodpecker-ci-plugin",
+  "generatedFrom": {
+    "sourceUrl": "https://woodpecker-ci.org/redocusaurus/plugin-redoc-0.yaml",
+    "sha256": "cadfe6ccbe3bdd1c29140d605704db9fe1ae76569d72d56792e326eb53cd596f",
+    "specVersion": "dev"
+  },
+  "structuredContent": {
+    "required": [
+      "data",
+      "status",
+      "request"
+    ],
+    "request": {
+      "required": [
+        "method",
+        "path"
+      ]
+    }
+  },
+  "environment": {
+    "required": [
+      "WOODPECKER_URL",
+      "WOODPECKER_API_TOKEN"
+    ],
+    "rejected": [
+      "DRONE_TOKEN"
+    ]
+  },
+  "operations": [
+    {
+      "name": "woodpecker_list_agents",
+      "method": "GET",
+      "path": "/agents",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "4d164d2b21c141d95c25f26e37ef7e1a1d623ff4223feb712ebaf9086a36ce60",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_new_agent",
+      "method": "POST",
+      "path": "/agents",
+      "parameters": [],
+      "inputSchemaHash": "8f84f71d14eb25b06a0331d7460f2539d7b4a038f50dbedaf2cbeddb2ee2ab7e",
+      "responseSchemaHash": "2064eba7c43b0d47677d244e347c275085db7b6a66b4922468a0db09dfb56579",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_agent",
+      "method": "DELETE",
+      "path": "/agents/{agent_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "98a6abdc55666fe6c062ea20acba1e02f94a495ec22f0ce49a51e2459522e580",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_agent",
+      "method": "GET",
+      "path": "/agents/{agent_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "98a6abdc55666fe6c062ea20acba1e02f94a495ec22f0ce49a51e2459522e580",
+      "responseSchemaHash": "2064eba7c43b0d47677d244e347c275085db7b6a66b4922468a0db09dfb56579",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_agent",
+      "method": "PATCH",
+      "path": "/agents/{agent_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "0279da585e366311f9489faf9f32e96b134ed687d2df887b689b9b8b0f584825",
+      "responseSchemaHash": "2064eba7c43b0d47677d244e347c275085db7b6a66b4922468a0db09dfb56579",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_agent_tasks",
+      "method": "GET",
+      "path": "/agents/{agent_id}/tasks",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "98a6abdc55666fe6c062ea20acba1e02f94a495ec22f0ce49a51e2459522e580",
+      "responseSchemaHash": "899772160be2b4633e3690d415ea1a740be150bc37df49eec37c96eea9858e56",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_provide_pipeline_status_information_ccmenu_tool",
+      "method": "GET",
+      "path": "/badges/{repo_id}/cc.xml",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_status_pipeline_as_svg_badge",
+      "method": "GET",
+      "path": "/badges/{repo_id}/status.svg",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_available_pprof_profiles_html",
+      "method": "GET",
+      "path": "/debug/pprof",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_stack_traces_that_led_blocking_on_synchronization_primitives",
+      "method": "GET",
+      "path": "/debug/pprof/block",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_command_line_invocation_current_program",
+      "method": "GET",
+      "path": "/debug/pprof/cmdline",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_stack_traces_all_current_goroutines",
+      "method": "GET",
+      "path": "/debug/pprof/goroutine",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "debug"
+        }
+      ],
+      "inputSchemaHash": "307948a1b094666db0b97ed3ff166138e7b3554b24ca7a36f94daa06ec205c94",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_heap_dump_sampling_memory_allocations_live_objects",
+      "method": "GET",
+      "path": "/debug/pprof/heap",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "gc"
+        }
+      ],
+      "inputSchemaHash": "8877d34a6663d99008691d77efb6fbae2a271cff6721bd80aac9804b03b40b1c",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_cpu_profile",
+      "method": "GET",
+      "path": "/debug/pprof/profile",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "seconds"
+        }
+      ],
+      "inputSchemaHash": "a2f3c824d086203aea3614fdbffb585474b708aafc764e9501f18aec0ed9cf8a",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_program_counters_mapping_function_names",
+      "method": "GET",
+      "path": "/debug/pprof/symbol",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_program_counters_mapping_function_names_post_debug_pprof_symbol",
+      "method": "POST",
+      "path": "/debug/pprof/symbol",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pprof_stack_traces_that_led_creation_new_os_threads",
+      "method": "GET",
+      "path": "/debug/pprof/threadcreate",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_trace_execution_current_program",
+      "method": "GET",
+      "path": "/debug/pprof/trace",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "seconds"
+        }
+      ],
+      "inputSchemaHash": "a2f3c824d086203aea3614fdbffb585474b708aafc764e9501f18aec0ed9cf8a",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_forges",
+      "method": "GET",
+      "path": "/forges",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "15cd54567c47ae8f7a0ee76915897ee0cd0d8f24840b281a73940fa7248b88cd",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_new_forge",
+      "method": "POST",
+      "path": "/forges",
+      "parameters": [],
+      "inputSchemaHash": "9e3f026519c89f5bb0a65d1728d30c1740451d84fe612180a586208662169885",
+      "responseSchemaHash": "8fbc02ae6d71409ca3a8fd0b6f98b3bbe458fcbc01ed90fa355e595808f305fb",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_forge",
+      "method": "DELETE",
+      "path": "/forges/{forge_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "forge_id"
+        }
+      ],
+      "inputSchemaHash": "3529d520df7b3ec2ed1deafa0a1a7a6fa9cb073372b7387eea0174d8b7f18426",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_forge",
+      "method": "GET",
+      "path": "/forges/{forge_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "forge_id"
+        }
+      ],
+      "inputSchemaHash": "3529d520df7b3ec2ed1deafa0a1a7a6fa9cb073372b7387eea0174d8b7f18426",
+      "responseSchemaHash": "8fbc02ae6d71409ca3a8fd0b6f98b3bbe458fcbc01ed90fa355e595808f305fb",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_forge",
+      "method": "PATCH",
+      "path": "/forges/{forge_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "forge_id"
+        }
+      ],
+      "inputSchemaHash": "8dcafb0276e9bf76f970c270cf6380c230792f5fbc1b6eb825558065362f088c",
+      "responseSchemaHash": "8fbc02ae6d71409ca3a8fd0b6f98b3bbe458fcbc01ed90fa355e595808f305fb",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_health_information",
+      "method": "GET",
+      "path": "/healthz",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_incoming_webhook_from_forge",
+      "method": "POST",
+      "path": "/hook",
+      "parameters": [],
+      "inputSchemaHash": "799e617e7a2d95d586ac1d164d4812374a9327140108a6c9ad9a9e2b900f759d",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_current_log_level",
+      "method": "GET",
+      "path": "/log-level",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "0840a40e0199716a6eb6dfc24ea38afecd7f700e5b99e08590ad1652d44bd556",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_set_log_level",
+      "method": "POST",
+      "path": "/log-level",
+      "parameters": [],
+      "inputSchemaHash": "c366fb9b894d45535403c39b38c1e8f2d5f4b8b345a51d3fac549db5360733a4",
+      "responseSchemaHash": "0840a40e0199716a6eb6dfc24ea38afecd7f700e5b99e08590ad1652d44bd556",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_organizations",
+      "method": "GET",
+      "path": "/orgs",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "bbba6ef3195d0c3038d03bef5376d01c42641783957d30a41b82fc1a000d588b",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_lookup_organization_full_name",
+      "method": "GET",
+      "path": "/orgs/lookup/{org_full_name}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_full_name"
+        }
+      ],
+      "inputSchemaHash": "2e6af9f95da38e821b240321a00a20a1db988303d30a8ec178067e1b834c6b1b",
+      "responseSchemaHash": "cf2f156a5b82d26f7ee3bfde65da2c1a7553a8bf12dba728875aea1d9bd474d1",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_organization",
+      "method": "DELETE",
+      "path": "/orgs/{org_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "c3576f7b88063be3fc09a9263f3cd605d21c25504b6bb6883f34d08e4b148cf2",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_organization",
+      "method": "GET",
+      "path": "/orgs/{org_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "c3576f7b88063be3fc09a9263f3cd605d21c25504b6bb6883f34d08e4b148cf2",
+      "responseSchemaHash": "bbba6ef3195d0c3038d03bef5376d01c42641783957d30a41b82fc1a000d588b",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_agents_organization",
+      "method": "GET",
+      "path": "/orgs/{org_id}/agents",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "50be11b10c15ea92e8fd0a670b0b74d2705eb0c1513858bcbab79dd55d3e6da5",
+      "responseSchemaHash": "4d164d2b21c141d95c25f26e37ef7e1a1d623ff4223feb712ebaf9086a36ce60",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_new_organization_scoped_agent",
+      "method": "POST",
+      "path": "/orgs/{org_id}/agents",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "2a001703dcf1eefeee7825e1307e4fcf1702fba223f3fe78cce4339bf2fb9ddc",
+      "responseSchemaHash": "2064eba7c43b0d47677d244e347c275085db7b6a66b4922468a0db09dfb56579",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_organization_scoped_agent",
+      "method": "DELETE",
+      "path": "/orgs/{org_id}/agents/{agent_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "55c6a22508f196272ccef291998599019c87f59b743bc3a9596c6593d02b7953",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_organization_scoped_agent",
+      "method": "PATCH",
+      "path": "/orgs/{org_id}/agents/{agent_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "agent_id"
+        }
+      ],
+      "inputSchemaHash": "ab7ae72851afea53cbd9e758871b640db918130bcab7b0a0f8d07129550399f0",
+      "responseSchemaHash": "2064eba7c43b0d47677d244e347c275085db7b6a66b4922468a0db09dfb56579",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_permissions_currently_authenticated_user_given_organization",
+      "method": "GET",
+      "path": "/orgs/{org_id}/permissions",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "c3576f7b88063be3fc09a9263f3cd605d21c25504b6bb6883f34d08e4b148cf2",
+      "responseSchemaHash": "3f4403ca175dcde5ddf95e6f9450ccdc677ffedc153bb340fe4f689452760485",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_organization_registries",
+      "method": "GET",
+      "path": "/orgs/{org_id}/registries",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "b0ba688263fc6f4ba53df342926ec98757d53cd9ff7a5f6071074537c579a94e",
+      "responseSchemaHash": "e19675119dbe6e35a855e1d70ceb979eda348a1d18c123f32bc0070d16184f75",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_organization_registry",
+      "method": "POST",
+      "path": "/orgs/{org_id}/registries",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "48d99858a485f0963e77eeb3f9b586e4088f70f52528ab39b606ee12d70d3613",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_organization_registry_name",
+      "method": "DELETE",
+      "path": "/orgs/{org_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "9cf9e295e438bee0067d44217d5df0f57f5c6da7ad56e9bf886d008a12cf9b79",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_organization_registry_address",
+      "method": "GET",
+      "path": "/orgs/{org_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "9cf9e295e438bee0067d44217d5df0f57f5c6da7ad56e9bf886d008a12cf9b79",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_organization_registry_name",
+      "method": "PATCH",
+      "path": "/orgs/{org_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "3f095d389ed27f316a1a69bf6273619cd681a5e9b7d6fd50f161f4060a07b2c7",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_organization_secrets",
+      "method": "GET",
+      "path": "/orgs/{org_id}/secrets",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "b0ba688263fc6f4ba53df342926ec98757d53cd9ff7a5f6071074537c579a94e",
+      "responseSchemaHash": "2bf48f539233ed5c56e723c042964209d4f5185bbbac3a08df5ad1e7aa04d513",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_organization_secret",
+      "method": "POST",
+      "path": "/orgs/{org_id}/secrets",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        }
+      ],
+      "inputSchemaHash": "9986a827772b0fcb86ad97820be2d2dae1e2e4530c894884e08359fd5dded9ae",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_organization_secret_name",
+      "method": "DELETE",
+      "path": "/orgs/{org_id}/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "97bcc9d248643cbecd14dfb03bc9d69b05e96aba0846764f7ec68947cf328ea5",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_organization_secret_name",
+      "method": "GET",
+      "path": "/orgs/{org_id}/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "97bcc9d248643cbecd14dfb03bc9d69b05e96aba0846764f7ec68947cf328ea5",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_organization_secret_name",
+      "method": "PATCH",
+      "path": "/orgs/{org_id}/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "org_id"
+        },
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "5fcdb181b50c6aedac49c6f16346836483374744cbb42a9dd231b555eb0e29c9",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_pipelines_in_queue",
+      "method": "GET",
+      "path": "/pipelines",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "baee75469b6396066081044fa961f96ac14ea9ed1fa006c076fee7729320c240",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_pipeline_queue_information",
+      "method": "GET",
+      "path": "/queue/info",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "efbdfab476b0c9a3dab457679428f5481f62537bc908c3c9b7574dcbc4e7ee31",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_block_til_pipeline_queue_has_running_item",
+      "method": "GET",
+      "path": "/queue/norunningpipelines",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_pause_pipeline_queue",
+      "method": "POST",
+      "path": "/queue/pause",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_resume_pipeline_queue",
+      "method": "POST",
+      "path": "/queue/resume",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_global_registries",
+      "method": "GET",
+      "path": "/registries",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "e19675119dbe6e35a855e1d70ceb979eda348a1d18c123f32bc0070d16184f75",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_global_registry",
+      "method": "POST",
+      "path": "/registries",
+      "parameters": [],
+      "inputSchemaHash": "4f60b389568a4633910456331182f3ecf74c28cfd316f8e5d1db80e74f8cd7bb",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_global_registry_name",
+      "method": "DELETE",
+      "path": "/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "40f92513f6d4dc3b1898f61d72899a03600dd35fd4feffe96acda3eef2119d65",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_global_registry_name",
+      "method": "GET",
+      "path": "/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "40f92513f6d4dc3b1898f61d72899a03600dd35fd4feffe96acda3eef2119d65",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_global_registry_name",
+      "method": "PATCH",
+      "path": "/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "464594b73a3c69b2c088c82b8c0cccb704cbe9542220dd431fb14124043b07ad",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_all_repositories_on_server",
+      "method": "GET",
+      "path": "/repos",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "active"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "c6face9680432048ef73dd248680eaf090aeb816a55de1b5a269aceb9ca97002",
+      "responseSchemaHash": "b6389dfe98cfcf70b75fa1c6b5c629cbda87a7131f76bbc776a2ced95667b382",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_activate_repository",
+      "method": "POST",
+      "path": "/repos",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "forge_remote_id"
+        }
+      ],
+      "inputSchemaHash": "984f3e0fba61450a396e04ff1025d6f755e2f727fa11053a4f2c2cc07f637f56",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_lookup_repository_full_name",
+      "method": "GET",
+      "path": "/repos/lookup/{repo_full_name}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_full_name"
+        }
+      ],
+      "inputSchemaHash": "dff967441cec49b0181ebcc9ac2d7e470df589f0c467dd09d7899c824add0aa0",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_repair_all_repositories_on_server",
+      "method": "POST",
+      "path": "/repos/repair",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_repository",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_repository",
+      "method": "GET",
+      "path": "/repos/{repo_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_repository",
+      "method": "PATCH",
+      "path": "/repos/{repo_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "99d14c0d1752c734a8922959bcb1e24f57a1e87e1454026d091e4c2df471978e",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_branches_repository",
+      "method": "GET",
+      "path": "/repos/{repo_id}/branches",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "e83809d8a2201fd0d5c4788c4044d97725eb053136cc6678db6ee92889b94018",
+      "responseSchemaHash": "2000ba4632f98bde4c5a0c2482bf604638b912b1a43b66cc655c6ff22f765718",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_change_repository_s_owner_currently_authenticated_user",
+      "method": "POST",
+      "path": "/repos/{repo_id}/chown",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "fe6e35e5f4cf3952d4833f099e6d8c405c9ee8846e1f0f2533142304cba2dbaf",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_cron_jobs",
+      "method": "GET",
+      "path": "/repos/{repo_id}/cron",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "e83809d8a2201fd0d5c4788c4044d97725eb053136cc6678db6ee92889b94018",
+      "responseSchemaHash": "b2f34b880786ecca6cc09b5a3563e7fd8994e5c29f968ce07ec5783fe013944c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_cron_job",
+      "method": "POST",
+      "path": "/repos/{repo_id}/cron",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "3ecf89d008d143343ba753a8e466f1cd944690d6d2b55ea0ddc0963d5c4dd009",
+      "responseSchemaHash": "0d508caf144bc220780270b3412f7f2da463b7011b435a3981ed486cf2462dba",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_cron_job",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/cron/{cron}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "cron"
+        }
+      ],
+      "inputSchemaHash": "b6c61d2c610ade79f5c4b15c6fea2f42193de208fc69335617ebad94aee6d452",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_cron_job",
+      "method": "GET",
+      "path": "/repos/{repo_id}/cron/{cron}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "cron"
+        }
+      ],
+      "inputSchemaHash": "b6c61d2c610ade79f5c4b15c6fea2f42193de208fc69335617ebad94aee6d452",
+      "responseSchemaHash": "0d508caf144bc220780270b3412f7f2da463b7011b435a3981ed486cf2462dba",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_cron_job",
+      "method": "PATCH",
+      "path": "/repos/{repo_id}/cron/{cron}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "cron"
+        }
+      ],
+      "inputSchemaHash": "3dc4f5fd6c884dd5297cf9f1f24ee96b7ed13139c21018676837a1dee47b522a",
+      "responseSchemaHash": "0d508caf144bc220780270b3412f7f2da463b7011b435a3981ed486cf2462dba",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_start_cron_job_now",
+      "method": "POST",
+      "path": "/repos/{repo_id}/cron/{cron}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "cron"
+        }
+      ],
+      "inputSchemaHash": "b6c61d2c610ade79f5c4b15c6fea2f42193de208fc69335617ebad94aee6d452",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_deletes_all_logs_pipeline",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/logs/{pipeline_number}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_step_logs_pipeline",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/logs/{pipeline_number}/{step_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        },
+        {
+          "location": "path",
+          "name": "step_id"
+        }
+      ],
+      "inputSchemaHash": "54e147f353c7fa8cfe3c46b33cf52abe47db90b9012f68876ffcc0d5b9d97f09",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_logs_pipeline_step",
+      "method": "GET",
+      "path": "/repos/{repo_id}/logs/{pipeline_number}/{step_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        },
+        {
+          "location": "path",
+          "name": "step_id"
+        }
+      ],
+      "inputSchemaHash": "54e147f353c7fa8cfe3c46b33cf52abe47db90b9012f68876ffcc0d5b9d97f09",
+      "responseSchemaHash": "9844bf2d32a0d761b04cc5c5cf7e5df481b8c59ff9f4a1255a48d7c138b44606",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_download_logs_pipeline_step",
+      "method": "GET",
+      "path": "/repos/{repo_id}/logs/{pipeline_number}/{step_id}/download",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        },
+        {
+          "location": "path",
+          "name": "step_id"
+        }
+      ],
+      "inputSchemaHash": "54e147f353c7fa8cfe3c46b33cf52abe47db90b9012f68876ffcc0d5b9d97f09",
+      "responseSchemaHash": "6707424af03d5eaeea59971cf28ed28dcd9a8b064ce0307119036bd8c7676391",
+      "responseKind": "text",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_move_repository_new_owner",
+      "method": "POST",
+      "path": "/repos/{repo_id}/move",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "to"
+        }
+      ],
+      "inputSchemaHash": "306994ee4e822c3a50e7a6d90aecac37c5acb7e5525d59365c0a355ddba7cc93",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_check_current_authenticated_users_access_repository",
+      "method": "GET",
+      "path": "/repos/{repo_id}/permissions",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "9342aae5a9a3ce5be94622c67db2c76d27884df082db27ece14c7cfb72d11ab3",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_repository_pipelines",
+      "method": "GET",
+      "path": "/repos/{repo_id}/pipelines",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        },
+        {
+          "location": "query",
+          "name": "before"
+        },
+        {
+          "location": "query",
+          "name": "after"
+        },
+        {
+          "location": "query",
+          "name": "branch"
+        },
+        {
+          "location": "query",
+          "name": "event"
+        },
+        {
+          "location": "query",
+          "name": "ref"
+        },
+        {
+          "location": "query",
+          "name": "status"
+        }
+      ],
+      "inputSchemaHash": "eeb6bd35d22a63896f8701bd5e876c26822a93052c733d44384de935f3c316aa",
+      "responseSchemaHash": "8721265cf8575cbadecc1b7c264cbe8d15785c16c54a1a768712be6b5ab7de77",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_trigger_manual_pipeline",
+      "method": "POST",
+      "path": "/repos/{repo_id}/pipelines",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "3ec9a3a0578f2f0e761adc9b51d1bb5b07975299e87462f10943dafb4f1d5d4e",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_pipeline",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_repositories_pipeline",
+      "method": "GET",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_restart_pipeline",
+      "method": "POST",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        },
+        {
+          "location": "query",
+          "name": "event"
+        },
+        {
+          "location": "query",
+          "name": "deploy_to"
+        }
+      ],
+      "inputSchemaHash": "890bf7ddd02935303f65b322b1f28a14a93dded45c28270223cc6b8b05ad6a3c",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_approve_and_start_pipeline",
+      "method": "POST",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}/approve",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_cancel_pipeline",
+      "method": "POST",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}/cancel",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_configuration_files_pipeline",
+      "method": "GET",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}/config",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "353459b8a4e68056230b0d0b8ed816745d2d25ea29d864b550363fcbe982a65a",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_decline_pipeline",
+      "method": "POST",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}/decline",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "808fbde466553120a7ee2be9d4c595b76a4b6ec8f48427ede33dd6a54167c122",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_metadata_pipeline_or_specific_workflow_including_previous_pipeline_info",
+      "method": "GET",
+      "path": "/repos/{repo_id}/pipelines/{pipeline_number}/metadata",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline_number"
+        }
+      ],
+      "inputSchemaHash": "dc679e2c5bc9deb71f717dfae4f8c2db22dc5320ca302d0a90917df38397d577",
+      "responseSchemaHash": "1760384a5e7ab50c334d000c04a4e7923fc075e2dd2da5cec979fe30f5d043af",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_active_pull_requests_repository",
+      "method": "GET",
+      "path": "/repos/{repo_id}/pull_requests",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "e83809d8a2201fd0d5c4788c4044d97725eb053136cc6678db6ee92889b94018",
+      "responseSchemaHash": "1ffca730f6367675ecbbc50c4be87cc339591bbddaecd8f72c136462eaf5fcd7",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_registries",
+      "method": "GET",
+      "path": "/repos/{repo_id}/registries",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "e83809d8a2201fd0d5c4788c4044d97725eb053136cc6678db6ee92889b94018",
+      "responseSchemaHash": "e19675119dbe6e35a855e1d70ceb979eda348a1d18c123f32bc0070d16184f75",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_registry",
+      "method": "POST",
+      "path": "/repos/{repo_id}/registries",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "bc29798f963cea6e7ac6387e78321b29a06094f59f836c99744cf696f0a1d00f",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_registry_name",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "f19bdc385342016f93f5423c72d74586cd8e470cac7a5a4abb3a22ec562963c1",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_registry_name",
+      "method": "GET",
+      "path": "/repos/{repo_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "f19bdc385342016f93f5423c72d74586cd8e470cac7a5a4abb3a22ec562963c1",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_registry_name",
+      "method": "PATCH",
+      "path": "/repos/{repo_id}/registries/{registry}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "registry"
+        }
+      ],
+      "inputSchemaHash": "c78b7fc0c4da004df5913a6fa452cb21f2ae8497c2bb8a9a57bc87072c7f58ba",
+      "responseSchemaHash": "c92136c8df57d5748307ac4d555bddc9edcb295910f34f56c650721071b12f71",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_repair_repository",
+      "method": "POST",
+      "path": "/repos/{repo_id}/repair",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "fb263411cf244dbd0e450a462643b1aacfd98157a48ff7957cac9111dfdd513b",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_repository_secrets",
+      "method": "GET",
+      "path": "/repos/{repo_id}/secrets",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "e83809d8a2201fd0d5c4788c4044d97725eb053136cc6678db6ee92889b94018",
+      "responseSchemaHash": "2bf48f539233ed5c56e723c042964209d4f5185bbbac3a08df5ad1e7aa04d513",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_repository_secret",
+      "method": "POST",
+      "path": "/repos/{repo_id}/secrets",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        }
+      ],
+      "inputSchemaHash": "c2319619bb897d986ba7fd9158ff63b0cc0efd53beed3036c5159c767feaddf2",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_repository_secret_name",
+      "method": "DELETE",
+      "path": "/repos/{repo_id}/secrets/{secretName}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "secretName"
+        }
+      ],
+      "inputSchemaHash": "3ccc19ffdca8c66004694bf11e082be9b98b4e576eef27b2c3bf00a021ea9359",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_repository_secret_name",
+      "method": "GET",
+      "path": "/repos/{repo_id}/secrets/{secretName}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "secretName"
+        }
+      ],
+      "inputSchemaHash": "3ccc19ffdca8c66004694bf11e082be9b98b4e576eef27b2c3bf00a021ea9359",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_repository_secret_name",
+      "method": "PATCH",
+      "path": "/repos/{repo_id}/secrets/{secretName}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "secretName"
+        }
+      ],
+      "inputSchemaHash": "08b25d44e4f5f40287298b14b78d4f0263b831a2fb65871545222a08bc5606d4",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_global_secrets",
+      "method": "GET",
+      "path": "/secrets",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "2bf48f539233ed5c56e723c042964209d4f5185bbbac3a08df5ad1e7aa04d513",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_global_secret",
+      "method": "POST",
+      "path": "/secrets",
+      "parameters": [],
+      "inputSchemaHash": "3446805db9cfd41f14d76b6669b5484ab9678357470e086ae337a96e4ed7d54b",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_global_secret_name",
+      "method": "DELETE",
+      "path": "/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "2c029a5d67471377e0c3cc733dccb1203e4c80f20f8125a9d6043ef0ff87bfef",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_global_secret_name",
+      "method": "GET",
+      "path": "/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "2c029a5d67471377e0c3cc733dccb1203e4c80f20f8125a9d6043ef0ff87bfef",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_global_secret_name",
+      "method": "PATCH",
+      "path": "/secrets/{secret}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "secret"
+        }
+      ],
+      "inputSchemaHash": "b897bbb3b0aa06d7b8948784404d786a42eb2914b85b59a557cec6269af15e7e",
+      "responseSchemaHash": "8eb446007ac0169f2097884a612ddc3a784c31eefde679954a3584ae0b92a14c",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_server_s_signature_public_key",
+      "method": "GET",
+      "path": "/signature/public-key",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_stream_events_like_pipeline_updates",
+      "method": "GET",
+      "path": "/stream/events",
+      "parameters": [],
+      "inputSchemaHash": "4be151af5ea94b8032b0ab5f8ea34757935fee87da8afc3bd801ebcf7b3cd608",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": true,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_stream_logs_pipeline_step",
+      "method": "GET",
+      "path": "/stream/logs/{repo_id}/{pipeline}/{step_id}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "repo_id"
+        },
+        {
+          "location": "path",
+          "name": "pipeline"
+        },
+        {
+          "location": "path",
+          "name": "step_id"
+        }
+      ],
+      "inputSchemaHash": "f07a5481c47aa2931aebabf0d9a18f755a5dff4dff06d5049727adcb9d964a7d",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": true,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_currently_authenticated_user",
+      "method": "GET",
+      "path": "/user",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "3e0d2c624af8354286a7eb06e0e957acce14a1532122364ee4cb0b035d19b33f",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_currently_authenticated_users_pipeline_feed",
+      "method": "GET",
+      "path": "/user/feed",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "baee75469b6396066081044fa961f96ac14ea9ed1fa006c076fee7729320c240",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_user_s_repositories",
+      "method": "GET",
+      "path": "/user/repos",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "all"
+        },
+        {
+          "location": "query",
+          "name": "name"
+        }
+      ],
+      "inputSchemaHash": "247449d19cc6dc8f42e65a84ab188d512587e5d581ab479f046fb672fdfc2e56",
+      "responseSchemaHash": "3b237bf935b96e17d91414a7d36568fa8a56f2a3aacf27f94c8367ea4dc6753e",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_reset_token",
+      "method": "DELETE",
+      "path": "/user/token",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_return_token_current_user_as_string",
+      "method": "POST",
+      "path": "/user/token",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_list_users",
+      "method": "GET",
+      "path": "/users",
+      "parameters": [
+        {
+          "location": "query",
+          "name": "page"
+        },
+        {
+          "location": "query",
+          "name": "perPage"
+        }
+      ],
+      "inputSchemaHash": "477348081748e20f025292ed20d94e9eb495660ca54c9d20c697a1a8eb6a6c0d",
+      "responseSchemaHash": "3dc7f67a1bad8fdc3af0a9b5fc96aeb3a57116571f656aea3f59996367293fa7",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_create_user",
+      "method": "POST",
+      "path": "/users",
+      "parameters": [],
+      "inputSchemaHash": "9706f03799be617684bab5eea10180cc63890213acae49b1af45e7c70837d938",
+      "responseSchemaHash": "3e0d2c624af8354286a7eb06e0e957acce14a1532122364ee4cb0b035d19b33f",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_delete_user",
+      "method": "DELETE",
+      "path": "/users/{login}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "login"
+        },
+        {
+          "location": "query",
+          "name": "forge_id"
+        },
+        {
+          "location": "query",
+          "name": "forge_remote_id"
+        }
+      ],
+      "inputSchemaHash": "e08ff1775904c477bdd3f649793337074b66b69a1def9e2b1636f80c5e3ecc55",
+      "responseSchemaHash": "1ab1dcbe984c565fe53cdb21824fbc47b8c482422d427c1ce42f71e4539a4710",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_user",
+      "method": "GET",
+      "path": "/users/{login}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "login"
+        },
+        {
+          "location": "query",
+          "name": "forge_id"
+        },
+        {
+          "location": "query",
+          "name": "forge_remote_id"
+        }
+      ],
+      "inputSchemaHash": "e08ff1775904c477bdd3f649793337074b66b69a1def9e2b1636f80c5e3ecc55",
+      "responseSchemaHash": "3e0d2c624af8354286a7eb06e0e957acce14a1532122364ee4cb0b035d19b33f",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_update_user",
+      "method": "PATCH",
+      "path": "/users/{login}",
+      "parameters": [
+        {
+          "location": "path",
+          "name": "login"
+        }
+      ],
+      "inputSchemaHash": "df6ff49d0666b054d2d9e98174e0d56376a10e00b43b05a32f32266bf4744e8c",
+      "responseSchemaHash": "3e0d2c624af8354286a7eb06e0e957acce14a1532122364ee4cb0b035d19b33f",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "woodpecker_get_version",
+      "method": "GET",
+      "path": "/version",
+      "parameters": [],
+      "inputSchemaHash": "42c78b8845773eecebb023be7aff9029ec75a44a7d76a122181215ea9d4433e0",
+      "responseSchemaHash": "1c685f431fc75ff4b1e6d01a6fffae51df45e5c566f7bcc17943507a9da6093f",
+      "responseKind": "json",
+      "stream": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

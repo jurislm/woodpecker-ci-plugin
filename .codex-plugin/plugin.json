@@ -1,12 +1,24 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "woodpecker-ci",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Manage Woodpecker CI through agent tools.",
   "author": {
     "name": "JurisLM",
     "url": "https://github.com/jurislm"
   },
   "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
-  "license": "MIT"
+  "license": "MIT",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "Woodpecker CI",
+    "shortDescription": "Manage Woodpecker CI through agent tools.",
+    "longDescription": "Inspect and control Woodpecker CI repositories, pipelines, logs, agents, secrets, and system state.",
+    "developerName": "JurisLM",
+    "category": "Developer tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin",
+    "defaultPrompt": "Inspect the current Woodpecker CI status."
+  }
 }

@@ -1,5 +1,6 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { jsonSchemaToZod } from "json-schema-to-zod";
 import YAML from "yaml";
 
@@ -15,12 +16,19 @@ const outputDir = "src/generated";
 const typeOutput = outputDir + "/woodpecker-api.ts";
 const zodOutput = outputDir + "/woodpecker-zod.ts";
 const operationsOutput = outputDir + "/operations.ts";
+const contractOutput = "contracts/woodpecker-mcp-v1.json";
 const methods = new Set(["get", "put", "post", "delete", "patch", "head", "options", "trace"]);
 const raw = await readFile(inputPath, "utf8");
 const document = YAML.parse(raw) as OpenApiDocument;
 const schemas = document.components?.schemas ?? {};
+const openapiManifest = JSON.parse(await readFile("openapi/manifest.json", "utf8")) as {
+  sourceUrl: string;
+  sha256: string;
+  specVersion: string;
+};
 
 await mkdir(outputDir, { recursive: true });
+await mkdir("contracts", { recursive: true });
 
 const generated = spawnSync(
   process.cwd() + "/node_modules/.bin/openapi-typescript",
@@ -65,6 +73,10 @@ function quote(value: string): string {
   return JSON.stringify(value);
 }
 
+function sha256(value: string): string {
+  return createHash("sha256").update(value).digest("hex");
+}
+
 function toolName(summary: string, method: string, path: string, used: Set<string>): string {
   const stopWords = new Set(["a", "an", "the", "of", "to", "by", "for"]);
   const words = summary
@@ -93,6 +105,7 @@ function responseInfo(operation: JsonObject): { schema: string; kind: string } {
 }
 
 const operations: string[] = [];
+const contractOperations: Array<Record<string, unknown>> = [];
 const usedNames = new Set<string>();
 for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
   for (const [method, operationValue] of Object.entries(pathItem)) {
@@ -130,10 +143,33 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
       : "z.object({ " + properties.join(", ") + " })";
     const response = responseInfo(operation);
     const destructive = method === "delete" || /delete|reset|revoke|remove|destroy/iu.test(summary);
-    const annotations = "{ readOnlyHint: " + (method === "get" || method === "head") +
-      ", destructiveHint: " + destructive +
-      ", idempotentHint: " + (method === "get" || method === "head") +
+    const annotationsValue = {
+      readOnlyHint: method === "get" || method === "head",
+      destructiveHint: destructive,
+      idempotentHint: method === "get" || method === "head",
+      openWorldHint: false,
+    };
+    const annotations = "{ readOnlyHint: " + annotationsValue.readOnlyHint +
+      ", destructiveHint: " + annotationsValue.destructiveHint +
+      ", idempotentHint: " + annotationsValue.idempotentHint +
       ", openWorldHint: false }";
+    const parameterContract = parameters
+      .filter((parameter) => parameter.in !== "header")
+      .map((parameter) => ({ location: parameter.in, name: parameter.name }));
+    const inputSchemaHash = sha256(inputSchema);
+    const responseSchemaHash = sha256(response.schema);
+    const operationContract = {
+      name,
+      method: method.toUpperCase(),
+      path,
+      parameters: parameterContract,
+      inputSchemaHash,
+      responseSchemaHash,
+      responseKind: response.kind,
+      stream: isStream,
+      annotations: annotationsValue,
+    };
+    contractOperations.push(operationContract);
 
     operations.push(
       "  { name: " + quote(name) +
@@ -145,6 +181,8 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
       ", responseKind: " + quote(response.kind) +
       ", parameters: [" + parameterMeta.join(", ") + "]" +
       ", stream: " + isStream +
+      ", inputSchemaHash: " + quote(inputSchemaHash) +
+      ", responseSchemaHash: " + quote(responseSchemaHash) +
       ", annotations: " + annotations + " }",
     );
   }
@@ -182,6 +220,8 @@ await Bun.write(
     "  responseKind: string;",
     "  parameters: Array<{ location: string; name: string }>;",
     "  stream: boolean;",
+    "  inputSchemaHash: string;",
+    "  responseSchemaHash: string;",
     "  annotations: { readOnlyHint: boolean; destructiveHint: boolean; idempotentHint: boolean; openWorldHint: boolean };",
     "};",
     "",
@@ -190,6 +230,32 @@ await Bun.write(
     "];",
     "",
   ].join("\n"),
+);
+
+await Bun.write(
+  contractOutput,
+  JSON.stringify(
+    {
+      contractVersion: "1.0.0",
+      package: "@jurislm/woodpecker-ci-plugin",
+      generatedFrom: {
+        sourceUrl: openapiManifest.sourceUrl,
+        sha256: openapiManifest.sha256,
+        specVersion: openapiManifest.specVersion,
+      },
+      structuredContent: {
+        required: ["data", "status", "request"],
+        request: { required: ["method", "path"] },
+      },
+      environment: {
+        required: ["WOODPECKER_URL", "WOODPECKER_API_TOKEN"],
+        rejected: ["DRONE_TOKEN"],
+      },
+      operations: contractOperations,
+    },
+    null,
+    2,
+  ) + "\n",
 );
 
 console.error("Generated " + operations.length + " operations");

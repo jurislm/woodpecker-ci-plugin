@@ -41,6 +41,10 @@ ChatGPT plugin endpoint.
 The current snapshot contains 118 operations. Generated tool names, input
 schemas, output schemas, and annotations live under `src/generated/`.
 
+The v1 contract is frozen in `contracts/woodpecker-mcp-v1.json`: tool names,
+paths, annotations, environment names, structured output, and schema hashes
+are checked by `bun run api:check` and the generated contract tests.
+
 ## OpenAI Plugin package
 
 This repository also contains the portable Agent Plugin layer:
@@ -50,6 +54,7 @@ This repository also contains the portable Agent Plugin layer:
 - `.codex-plugin/plugin.json` — Codex compatibility fallback.
 - `.mcp.json.example` — local configuration example without secrets.
 - `skills/woodpecker-ci/SKILL.md` — service-specific tool-selection guidance.
+- `.mcp.json` and `.app.json` — Codex compatibility companion files.
 
 This version is private/local distribution. It does not provide a public
 HTTPS `/mcp` endpoint or OAuth flow.

@@ -14,16 +14,30 @@ export async function validatePluginManifests(): Promise<void> {
   const plugin = await readJson("plugin.json");
   const fallback = await readJson(".codex-plugin/plugin.json");
   const mcp = await readJson("mcp.json");
+  const packageJson = await readJson("package.json");
 
   if (!validatePlugin(plugin)) throw new Error("plugin.json: " + ajv.errorsText(validatePlugin.errors));
-  if (!validatePlugin(fallback)) throw new Error(".codex-plugin/plugin.json: " + ajv.errorsText(validatePlugin.errors));
   if (!validateMcp(mcp)) throw new Error("mcp.json: " + ajv.errorsText(validateMcp.errors));
 
   if (plugin.name !== "woodpecker-ci") throw new Error("plugin.json has the wrong name");
+  if (packageJson.version !== "1.0.0") throw new Error("package.json must be version 1.0.0");
+  if (plugin.version !== packageJson.version || fallback.version !== packageJson.version) {
+    throw new Error("Plugin manifests and package.json must share the same version");
+  }
   if (fallback.name !== plugin.name) throw new Error("Codex fallback identity does not match root manifest");
+  if (fallback.version !== packageJson.version) throw new Error("Codex fallback version does not match package.json");
+  if (!fallback.interface || typeof fallback.interface !== "object") {
+    throw new Error("Codex fallback must contain a direct interface object");
+  }
+  if (fallback.skills !== "./skills/" || fallback.mcpServers !== "./.mcp.json" || fallback.apps !== "./.app.json") {
+    throw new Error("Codex fallback must reference skills, .mcp.json, and .app.json");
+  }
   const server = mcp.mcpServers?.["woodpecker-ci"];
   if (!server || server.type !== "stdio") throw new Error("mcp.json must define the woodpecker-ci stdio server");
   if (server.command !== "bunx") throw new Error("mcp.json must use bunx");
+  if (!server.args?.includes("@jurislm/woodpecker-ci-plugin@" + packageJson.version)) {
+    throw new Error("mcp.json must pin the published package version");
+  }
 
   const example = await readJson(".mcp.json.example");
   if (!example.mcpServers?.["woodpecker-ci"]) throw new Error(".mcp.json.example is missing woodpecker-ci");

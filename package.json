@@ -38,7 +38,7 @@
     "smoke:stdio": "bun scripts/smoke-stdio.ts",
     "manifest:fetch": "bun scripts/update-agent-plugin-schemas.ts",
     "manifest:check": "bun scripts/validate-plugin-manifests.ts",
-    "check": "bun run manifest:check && bun run api:check && bun run typecheck && bun test && bun run build && npm pack --dry-run",
+    "check": "bun run manifest:check && bun run api:check && bun run typecheck && bun test && bun run build && bun pm pack --dry-run",
     "prepublishOnly": "bun run check"
   },
   "dependencies": {

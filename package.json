@@ -1,6 +1,6 @@
 {
   "name": "@jurislm/woodpecker-ci-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local stdio MCP server for Woodpecker CI",
   "type": "module",
   "bin": {

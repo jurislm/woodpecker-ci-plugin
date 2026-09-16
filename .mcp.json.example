@@ -2,7 +2,7 @@
   "mcpServers": {
     "woodpecker-ci": {
       "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@1.0.0"],
+      "args": ["-y", "@jurislm/woodpecker-ci-plugin@1.0.1"],
       "env": {
         "WOODPECKER_URL": "https://ci.example.com/api",
         "WOODPECKER_API_TOKEN": "<set-in-host-environment>"

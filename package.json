@@ -28,6 +28,7 @@
     "api:generate": "bun scripts/generate-openapi.ts",
     "api:check": "bun run api:generate && git diff --exit-code -- openapi src/generated",
     "smoke:read": "bun scripts/smoke-read.ts",
+    "smoke:stdio": "bun scripts/smoke-stdio.ts",
     "check": "bun run api:check && bun run typecheck && bun test && bun run build && npm pack --dry-run",
     "prepublishOnly": "bun run check"
   },

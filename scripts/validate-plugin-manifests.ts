@@ -14,6 +14,7 @@ export async function validatePluginManifests(): Promise<void> {
   const plugin = await readJson("plugin.json");
   const fallback = await readJson(".codex-plugin/plugin.json");
   const mcp = await readJson("mcp.json");
+  const localMcp = await readJson(".mcp.json");
   const packageJson = await readJson("package.json");
 
   if (!validatePlugin(plugin)) throw new Error("plugin.json: " + ajv.errorsText(validatePlugin.errors));
@@ -37,8 +38,11 @@ export async function validatePluginManifests(): Promise<void> {
   const server = mcp.mcpServers?.["woodpecker-ci"];
   if (!server || server.type !== "stdio") throw new Error("mcp.json must define the woodpecker-ci stdio server");
   if (server.command !== "bunx") throw new Error("mcp.json must use bunx");
-  if (!server.args?.includes("@jurislm/woodpecker-ci-plugin@" + packageJson.version)) {
-    throw new Error("mcp.json must pin the published package version");
+  if (!server.args?.includes("@jurislm/woodpecker-ci-plugin@latest")) {
+    throw new Error("mcp.json must use the latest published package");
+  }
+  if (!localMcp.mcpServers?.["woodpecker-ci"]?.args?.includes("@jurislm/woodpecker-ci-plugin@latest")) {
+    throw new Error(".mcp.json must use the latest published package");
   }
 
   const example = await readJson(".mcp.json.example");

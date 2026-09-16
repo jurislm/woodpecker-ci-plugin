@@ -4,6 +4,7 @@ import { WoodpeckerClient, WoodpeckerApiError } from "./client.js";
 import type { FetchLike } from "./client.js";
 import type { WoodpeckerConfig } from "./config.js";
 import { operations } from "./generated/operations.js";
+import packageJson from "../package.json" with { type: "json" };
 
 const outputRequestSchema = z.object({
   method: z.string(),
@@ -16,7 +17,7 @@ export function createServer(
 ): McpServer {
   const client = new WoodpeckerClient(config, fetchImpl);
   const server = new McpServer(
-    { name: "woodpecker-ci-plugin", version: "1.0.2" },
+    { name: "woodpecker-ci-plugin", version: packageJson.version },
     {
       instructions:
         "Use read tools to resolve exact Woodpecker IDs and permissions before mutations. Never expose tokens or secret values in narration or logs.",

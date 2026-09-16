@@ -211,8 +211,14 @@ export function validateReleaseContents(contents: ReleaseContents): void {
   }
   const baseHistory = contents.baseChangelogText.slice(prefix.length);
   const headHistory = contents.headChangelogText.slice(prefix.length);
-  if (baseHistory.length === 0 || !headHistory.endsWith(baseHistory)) throw new Error("CHANGELOG must preserve all existing release history");
-  if (!headHistory.slice(0, headHistory.length - baseHistory.length).startsWith(`## [${contents.version}](`)) {
+  const firstReleaseHeading = baseHistory.indexOf("## [");
+  if (firstReleaseHeading < 0) throw new Error("CHANGELOG must preserve all existing release history");
+  const changelogPreamble = baseHistory.slice(0, firstReleaseHeading);
+  const baseReleaseHistory = baseHistory.slice(firstReleaseHeading);
+  if (!headHistory.startsWith(changelogPreamble)) throw new Error("CHANGELOG preamble changed");
+  const headAfterPreamble = headHistory.slice(changelogPreamble.length);
+  if (!headAfterPreamble.endsWith(baseReleaseHistory)) throw new Error("CHANGELOG must preserve all existing release history");
+  if (!headAfterPreamble.slice(0, headAfterPreamble.length - baseReleaseHistory.length).startsWith(`## [${contents.version}](`)) {
     throw new Error("CHANGELOG must prepend the title version heading");
   }
 }

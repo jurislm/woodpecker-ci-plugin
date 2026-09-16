@@ -1,30 +1,68 @@
-# Woodpecker CI MCP Plugin Design
+# Woodpecker CI OpenAI Agent Plugin Design
 
 ## Goal
 
-Expose the current Woodpecker CI API as a local, Bun-based stdio MCP server for agents. The package is public on GitHub and npm, but is not a remote ChatGPT plugin in this iteration.
+Build a complete portable OpenAI Agent Plugin for Woodpecker CI, with the same outer package contract used by the future Coolify and Hetzner plugins. Each service keeps its own API client, schemas, and tools.
 
-## Architecture
+OpenAI defines a plugin as a package that can contain skills, an MCP server, or both. The portable package uses root `plugin.json` and root `mcp.json`; `.codex-plugin/plugin.json` is an optional Codex compatibility fallback.
 
-- Runtime: Bun >=1.1, `@modelcontextprotocol/sdk`, `registerTool`, Zod, stdio transport.
-- Authentication: `WOODPECKER_URL` is the Woodpecker API base URL including `/api`; `WOODPECKER_API_TOKEN` is the only accepted token variable.
-- API contract: a committed snapshot of the official OpenAPI 3 dev document. Code generation produces request/response TypeScript types, Zod schemas, and an operation registry.
-- One MCP tool is registered per OpenAPI operation. No arbitrary URL or arbitrary HTTP request tool exists.
-- A shared native-fetch client handles URL construction, bearer authentication, timeout, response decoding, and sanitized errors.
-- Successful tools return `{ data, status, request }` in `structuredContent`; protocol logs use stderr only.
+## Canonical package layers
 
-## Safety
+1. Portable plugin package: root `plugin.json`, root `mcp.json`, optional `skills/`, assets, and hooks.
+2. OpenAI presentation: `plugin.json.extensions.com.openai.interface`; registered MCP mappings use `.app.json` only when a Developer Mode app ID exists.
+3. Runtime package: `package.json`, Bun entrypoints, shared MCP server core, and service API client.
+4. Local development: `.mcp.json.example` for stdio; actual credentials stay outside the repository.
+5. Remote plugin: Streamable HTTP `/mcp` at a stable public HTTPS origin.
 
-- GET/HEAD operations are read-only and idempotent.
-- Delete, token reset, secret/registry/agent/repository deletion, and equivalent operations are marked destructive.
-- Mutation calls are never retried automatically.
-- Tokens and request bodies are excluded from request metadata and error logs.
-- Streaming operations collect for a bounded duration: default 5 seconds, maximum 30 seconds.
+## Unified outer tree
+
+```text
+<service>-plugin/
+├── plugin.json
+├── mcp.json
+├── .codex-plugin/plugin.json
+├── .mcp.json.example
+├── .app.json.example
+├── skills/<service>/SKILL.md
+├── assets/
+├── package.json
+├── src/
+│   ├── config.ts
+│   ├── client.ts
+│   ├── server.ts
+│   ├── transports/stdio.ts
+│   ├── transports/http.ts
+│   ├── tools/
+│   └── generated/
+├── api/
+├── scripts/
+├── .woodpecker/
+├── README.md
+└── LICENSE
+```
+
+The tree is shared across Woodpecker, Coolify, and Hetzner. `api/`, `src/client.ts`, generated schemas, tool names, and environment variables remain service-specific.
+
+## MCP contract
+
+- One tool per supported user goal or generated API operation.
+- `registerTool`, explicit input/output schemas, and accurate readOnly, destructive, idempotent, and open-world annotations.
+- Success envelope: `{ data, status, request }` in `structuredContent` plus model-readable text.
+- Errors never include tokens, authorization headers, or secret values.
+- stdio and Streamable HTTP reuse the same server core and tool registry.
+- UI is optional; all three plugins must remain useful headlessly.
+
+## Authentication
+
+- Local stdio uses service-specific environment variables and never commits credentials.
+- Remote `/mcp` must use a per-user authentication design; a shared service admin token is not acceptable for a public plugin.
+- OAuth 2.1, credential vault, token exchange, and provider-specific identity mapping are deployment decisions that must be resolved before public submission.
 
 ## Acceptance
 
-- The generated registry represents the committed spec exactly and has unique tool names.
-- The server starts over stdio and exposes every generated tool.
-- Unit tests cover configuration, request construction, response decoding, errors, streams, and MCP registration.
-- Woodpecker CI validates generation, typecheck, tests, build, and package contents.
-- A tag workflow publishes the matching package version using the Woodpecker `NPM_TOKEN` secret.
+- Portable `plugin.json` and `mcp.json` validate against the official schemas.
+- `.codex-plugin/plugin.json` is a compatibility fallback and does not conflict with root `extensions.com.openai`.
+- Local stdio starts and lists all tools.
+- Remote public HTTPS `/mcp` initializes and passes MCP Inspector.
+- Developer Mode discovers the tools and auth flow.
+- Package installation, skills discovery, CI, release, and plugin submission readbacks are separate evidence layers.

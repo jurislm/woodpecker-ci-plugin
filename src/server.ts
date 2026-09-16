@@ -16,7 +16,7 @@ export function createServer(
 ): McpServer {
   const client = new WoodpeckerClient(config, fetchImpl);
   const server = new McpServer(
-    { name: "woodpecker-ci-plugin", version: "1.0.1" },
+    { name: "woodpecker-ci-plugin", version: "1.0.2" },
     {
       instructions:
         "Use read tools to resolve exact Woodpecker IDs and permissions before mutations. Never expose tokens or secret values in narration or logs.",

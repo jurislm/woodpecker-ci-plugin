@@ -3,7 +3,7 @@
     "woodpecker-ci": {
       "type": "stdio",
       "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@1.0.0"]
+      "args": ["-y", "@jurislm/woodpecker-ci-plugin@1.0.1"]
     }
   }
 }

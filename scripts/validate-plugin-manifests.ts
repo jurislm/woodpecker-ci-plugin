@@ -20,7 +20,9 @@ export async function validatePluginManifests(): Promise<void> {
   if (!validateMcp(mcp)) throw new Error("mcp.json: " + ajv.errorsText(validateMcp.errors));
 
   if (plugin.name !== "woodpecker-ci") throw new Error("plugin.json has the wrong name");
-  if (packageJson.version !== "1.0.0") throw new Error("package.json must be version 1.0.0");
+  if (typeof packageJson.version !== "string" || packageJson.version.length === 0) {
+    throw new Error("package.json must contain a version");
+  }
   if (plugin.version !== packageJson.version || fallback.version !== packageJson.version) {
     throw new Error("Plugin manifests and package.json must share the same version");
   }

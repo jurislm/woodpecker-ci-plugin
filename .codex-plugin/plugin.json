@@ -1,6 +1,6 @@
 {
   "name": "woodpecker-ci",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Manage Woodpecker CI through agent tools.",
   "author": {
     "name": "JurisLM",
@@ -17,7 +17,10 @@
     "longDescription": "Inspect and control Woodpecker CI repositories, pipelines, logs, agents, secrets, and system state.",
     "developerName": "JurisLM",
     "category": "Developer tools",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "composerIcon": "./assets/woodpecker_ci.svg",
     "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin",
     "defaultPrompt": "Inspect the current Woodpecker CI status."

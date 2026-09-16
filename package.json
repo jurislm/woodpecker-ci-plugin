@@ -1,0 +1,45 @@
+{
+  "name": "@jurislm/woodpecker-ci-plugin",
+  "version": "0.1.0",
+  "description": "Local stdio MCP server for Woodpecker CI",
+  "type": "module",
+  "bin": {
+    "woodpecker-ci-plugin": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "clean": "bun scripts/clean-dist.ts",
+    "build": "bun run clean && tsc",
+    "start": "bun dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test --path-ignore-patterns dist",
+    "api:fetch": "bun scripts/update-openapi.ts",
+    "api:generate": "bun scripts/generate-openapi.ts",
+    "api:check": "bun run api:generate && git diff --exit-code -- openapi src/generated",
+    "smoke:read": "bun scripts/smoke-read.ts",
+    "check": "bun run api:check && bun run typecheck && bun test && bun run build && npm pack --dry-run",
+    "prepublishOnly": "bun run check"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.2",
+    "json-schema-to-zod": "2.8.1",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "yaml": "2.9.1"
+  }
+}

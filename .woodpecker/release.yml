@@ -16,6 +16,7 @@ steps:
       NPM_TOKEN:
         from_secret: npm_token
     commands:
+      - apk add --no-cache git
       - trap 'rm -f "$HOME/.npmrc"' EXIT
       - printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
       - bun publish --access public

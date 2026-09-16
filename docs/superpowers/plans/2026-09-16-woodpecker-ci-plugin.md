@@ -1,97 +1,40 @@
-# Complete OpenAI Woodpecker Plugin Implementation Plan
+# Woodpecker CI Complete OpenAI Plugin Implementation Plan
 
 > **For agentic workers:** Implement task-by-task with TDD and verify every command and external readback before claiming completion.
 
-**Goal:** Convert the current Woodpecker MCP package into a complete portable OpenAI Agent Plugin and use the same outer contract for Coolify and Hetzner.
+**Goal:** Package the existing Woodpecker stdio MCP server as a complete portable OpenAI Agent Plugin for private/local distribution.
 
-**Architecture:** Keep one service-specific MCP server core and expose it through stdio for local development and Streamable HTTP `/mcp` for the hosted Plugin. Package the server with root `plugin.json`, root `mcp.json`, optional skills/assets/hooks, and a Codex compatibility manifest.
+**Scope:** Woodpecker CI only. Coolify and Hetzner are handled in another task and must not be changed or included in this implementation.
 
-**Tech Stack:** Bun >=1.1, TypeScript, `@modelcontextprotocol/sdk`, Zod, native fetch, OpenAPI code generation where an official spec exists, Agent Plugins `plugin.json` schema, and Agent Plugins `mcp.json` schema.
+**Architecture:** Keep the current transport-independent MCP tool registry and native-fetch client. Add portable Plugin manifests, a Codex compatibility fallback, one service skill, official schema validation, and an official stdio `mcp.json` entry.
 
 **Spec:** `docs/superpowers/specs/2026-09-16-woodpecker-ci-plugin-design.md`
 
 ## Global Constraints
 
-- Root `plugin.json` and root `mcp.json` are required for a complete portable Plugin containing an MCP server.
-- `.codex-plugin/plugin.json` is compatibility fallback only; root `extensions.com.openai` is canonical when present.
-- `.mcp.json.example` is local stdio development configuration; never commit credentials.
-- `.app.json.example` contains no live Developer Mode app ID; actual `.app.json` mappings are environment-specific.
-- The same package contract must work for Woodpecker, Coolify, and Hetzner; service API clients remain separate.
-- Local stdio and hosted Streamable HTTP must use the same MCP tool registry.
-- A public Plugin requires a stable public HTTPS `/mcp` endpoint and a resolved per-user authentication flow.
-- Keep the current Woodpecker OpenAPI snapshot/codegen and 118-tool contract.
+- Root `plugin.json` and root `mcp.json` are the canonical portable Plugin files.
+- `.codex-plugin/plugin.json` is only a Codex compatibility fallback.
+- `.mcp.json.example` and `.app.json.example` contain no credentials or live app IDs.
+- `mcp.json` uses `type: "stdio"`; no HTTP transport, OAuth, hosting, or public submission in this scope.
+- Existing 118-tool OpenAPI snapshot, generated registry, client contract, and safety annotations remain intact.
+- Only `/Users/terrychen/Documents/Github/jurislm/woodpecker-ci-plugin` may change.
 
-### Task 1: Add the portable Plugin manifests
+### Task 1: Add portable Plugin manifests and service skill
 
-Create:
+Create root `plugin.json`, root `mcp.json`, `.codex-plugin/plugin.json`, `.mcp.json.example`, `.app.json.example`, `skills/woodpecker-ci/SKILL.md`, and `assets/.gitkeep`. Root manifests use the official Agent Plugins 1.0 schemas. The root MCP entry runs the published Bun package through `bunx`; local env values remain host-provided.
 
-```text
-plugin.json
-mcp.json
-.codex-plugin/plugin.json
-.mcp.json.example
-.app.json.example
-skills/woodpecker-ci/SKILL.md
-assets/.gitkeep
-```
+### Task 2: Add official schema snapshots and validation
 
-`plugin.json` must use the Agent Plugins schema, portable identity fields, and `extensions.com.openai.interface`. `mcp.json` must declare the named MCP server with `type: "streamable-http"` and the hosted `/mcp` URL. `.codex-plugin/plugin.json` must not override root identity. `.mcp.json.example` must use stdio and external env variables only.
+Fetch and commit the Agent Plugins `plugin.schema.json` and `mcp.schema.json` snapshots. Add an Ajv 2020 validator and tests for root identity, OpenAI interface metadata, stdio MCP transport, Codex fallback identity, credential-free examples, and skill frontmatter. Add `manifest:fetch`, `manifest:check`, and include manifest validation in `bun run check`.
 
-### Task 2: Split transport from the MCP server core
+### Task 3: Refactor the existing stdio entrypoint
 
-Keep generated operations, tool registration, annotations, output envelope, and service client transport-independent. Add:
+Move stdio startup into `src/transports/stdio.ts` while preserving `src/index.ts` behavior and the existing 118-tool list. Do not add HTTP, OAuth, UI, hooks, or service code for other products.
 
-```text
-src/transports/stdio.ts
-src/transports/http.ts
-```
+### Task 4: Validate package distribution
 
-The stdio entrypoint must preserve the current local smoke test. The HTTP entrypoint must expose `/mcp` through the MCP SDK Streamable HTTP transport, apply request authentication, and never expose the service token in client-visible output.
+Include portable Plugin files, skill, assets, and dist output in npm packaging. Validate `npm pack --dry-run`, `bunx` stdio startup, manifest discovery, and local marketplace/package installation instructions. Update README with the private/local Plugin boundary.
 
-### Task 3: Resolve remote authentication before public hosting
+### Task 5: Final acceptance/readback
 
-Choose and document one per-user auth contract:
-
-- OAuth 2.1 mapping to a user-scoped service credential; or
-- an approved credential-vault/token-exchange design.
-
-Reject a shared admin token for public usage. Add auth discovery, unauthorized responses, token redaction, and read/write authorization tests. Do not mark the remote Plugin public-ready until the hosted auth flow is read back end-to-end.
-
-### Task 4: Preserve generated service tools
-
-Keep the current Woodpecker OpenAPI snapshot, manifest, codegen pipeline, 118 generated tools, native-fetch client, stream bounds, and annotations. Apply the same generated-tool contract to Coolify and Hetzner without copying their API models.
-
-### Task 5: Add complete Plugin validation
-
-Add checks for:
-
-- root `plugin.json` schema and `extensions.com.openai.interface`;
-- root `mcp.json` schema and transport `type`;
-- `.codex-plugin/plugin.json` compatibility behavior;
-- `.mcp.json.example` stdio startup;
-- skill discovery;
-- `tools/list`, schemas, annotations, structured output, and error redaction;
-- stdio MCP Inspector;
-- hosted HTTPS `/mcp` MCP Inspector;
-- ChatGPT Developer Mode connection;
-- representative direct, indirect, follow-up, write, unauthorized, and unsupported prompts.
-
-### Task 6: Align CI, package, hosting, and submission
-
-Update `.woodpecker/ci.yml` and `.woodpecker/release.yml` to validate both transports and manifest/package contents. Add hosting deployment for stable HTTPS `/mcp`, domain/TLS/readiness checks, logs/metrics, rollback identity, privacy/support URLs, starter prompts, test cases, and public submission artifacts.
-
-### Task 7: Acceptance/readback
-
-Separate the evidence layers:
-
-1. package manifest validation;
-2. local stdio startup and 118-tool list;
-3. generated API exact-head check;
-4. hosted `/mcp` health and MCP initialization;
-5. auth discovery and per-user account readback;
-6. exact-head Woodpecker CI;
-7. npm package version readback;
-8. OpenAI Developer Mode discovery;
-9. public Plugin submission/review status.
-
-Do not claim complete official Plugin support from npm publication, local stdio, or green CI alone.
+Run `bun run manifest:check`, `bun run api:check`, `bun run typecheck`, `bun test`, `bun run build`, `npm pack --dry-run`, and stdio `tools/list` readback showing 118 tools. Verify GitHub main, npm version, and local Plugin package separately. Do not claim public HTTPS Plugin submission or remote auth.

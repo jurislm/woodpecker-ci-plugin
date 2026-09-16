@@ -1,0 +1,10 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "woodpecker-ci": {
+      "type": "stdio",
+      "command": "bunx",
+      "args": ["-y", "@jurislm/woodpecker-ci-plugin@0.1.0"]
+    }
+  }
+}

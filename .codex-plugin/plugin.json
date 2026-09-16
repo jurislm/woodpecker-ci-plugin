@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "woodpecker-ci",
+  "version": "0.1.0",
+  "description": "Manage Woodpecker CI through agent tools.",
+  "author": {
+    "name": "JurisLM",
+    "url": "https://github.com/jurislm"
+  },
+  "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "license": "MIT"
+}

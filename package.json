@@ -9,7 +9,14 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "plugin.json",
+    "mcp.json",
+    ".codex-plugin",
+    ".mcp.json.example",
+    ".app.json.example",
+    "skills",
+    "assets"
   ],
   "engines": {
     "bun": ">=1.1.0"
@@ -29,7 +36,9 @@
     "api:check": "bun run api:generate && git diff --exit-code -- openapi src/generated",
     "smoke:read": "bun scripts/smoke-read.ts",
     "smoke:stdio": "bun scripts/smoke-stdio.ts",
-    "check": "bun run api:check && bun run typecheck && bun test && bun run build && npm pack --dry-run",
+    "manifest:fetch": "bun scripts/update-agent-plugin-schemas.ts",
+    "manifest:check": "bun scripts/validate-plugin-manifests.ts",
+    "check": "bun run manifest:check && bun run api:check && bun run typecheck && bun test && bun run build && npm pack --dry-run",
     "prepublishOnly": "bun run check"
   },
   "dependencies": {
@@ -37,6 +46,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "ajv": "8.20.0",
     "@types/bun": "1.4.2",
     "json-schema-to-zod": "2.8.1",
     "openapi-typescript": "7.13.0",

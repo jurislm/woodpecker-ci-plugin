@@ -67,6 +67,7 @@ function validContents(): Parameters<typeof validateReleaseContents>[0] {
   const headPackage = { ...basePackage, version: VERSION };
   const basePlugin = { name: "woodpecker-ci", version: "1.0.2", description: "plugin" };
   const headPlugin = { ...basePlugin, version: VERSION };
+  const changelogPreamble = "All notable changes to this project will be documented in this file.\n\n";
   const oldHistory = "## [1.0.2](https://github.com/jurislm/woodpecker-ci-plugin/releases/tag/v1.0.2)\n\nInitial release\n";
   const newBlock = `## [${VERSION}](https://github.com/jurislm/woodpecker-ci-plugin/releases/tag/v${VERSION})\n\n### Bug Fixes\n\n* safe release\n\n`;
   return {
@@ -79,8 +80,8 @@ function validContents(): Parameters<typeof validateReleaseContents>[0] {
     headPluginManifestText: JSON.stringify(headPlugin),
     baseFallbackManifestText: JSON.stringify(basePlugin),
     headFallbackManifestText: JSON.stringify(headPlugin),
-    baseChangelogText: `# Changelog\n\n${oldHistory}`,
-    headChangelogText: `# Changelog\n\n${newBlock}${oldHistory}`,
+    baseChangelogText: `# Changelog\n\n${changelogPreamble}${oldHistory}`,
+    headChangelogText: `# Changelog\n\n${changelogPreamble}${newBlock}${oldHistory}`,
   };
 }
 

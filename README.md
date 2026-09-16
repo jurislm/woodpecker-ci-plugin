@@ -88,6 +88,17 @@ For local Codex marketplace testing, add the repository marketplace at
 `.agents/plugins/marketplace.json`, then install `woodpecker-ci` from the
 `jurislm-woodpecker` marketplace.
 
+## Release automation
+
+Merges to `main` run the normal checks and update the Release Please Release
+PR. After the `ci` and `release` pipelines succeed, Woodpecker validates and
+merges that Release PR. The resulting `vX.Y.Z` tag starts the npm release
+pipeline, which publishes the package with the `npm_token` repository secret.
+
+Release Please determines the version from Conventional Commits. The release
+workflow requires the `personal_access_tokens_fine_grained_tokens_jurislm`
+repository secret; PR pipelines never receive either release secret.
+
 ## Security
 
 Tokens are sent only as bearer authentication and are not included in logs or

@@ -8,3 +8,4 @@ coverage/
 *.log
 *.tgz
 .superpowers/
+.worktrees/

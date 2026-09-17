@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.0...v1.1.1) (2026-09-17)
+
+
+### Bug Fixes
+
+* make Woodpecker plugin icon discoverable ([6246075](https://github.com/jurislm/woodpecker-ci-plugin/commit/6246075e722b70cc4d035b45d113e03da8c6b1c2))
+* make Woodpecker plugin icon discoverable ([e6d4b76](https://github.com/jurislm/woodpecker-ci-plugin/commit/e6d4b76a33903046d220e8a1fa781c8c4ddb7320))
+
 ## [1.1.0](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.0.2...v1.1.0) (2026-09-16)
 
 

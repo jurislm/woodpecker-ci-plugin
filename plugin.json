@@ -28,7 +28,8 @@
           "Read",
           "Write"
         ],
-        "composerIcon": "./assets/woodpecker_ci.svg",
+        "composerIcon": "./assets/woodpecker_ci.png",
+        "logo": "./assets/woodpecker_ci.png",
         "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin"
       }
     }

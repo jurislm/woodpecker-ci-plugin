@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.1...v1.1.2) (2026-09-18)
+
+
+### Bug Fixes
+
+* add root plugin starter prompt ([3126758](https://github.com/jurislm/woodpecker-ci-plugin/commit/3126758181e9147d243b46459830e1d122d5610f))
+* add root plugin starter prompt ([1336019](https://github.com/jurislm/woodpecker-ci-plugin/commit/13360197fec9ca5e0a6cdd6cd60ef2640a0e81a7))
+
 ## [1.1.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.0...v1.1.1) (2026-09-17)
 
 

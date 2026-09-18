@@ -21,4 +21,11 @@ describe("portable Woodpecker Plugin package", () => {
     expect(fallback.interface.composerIcon).toBe("./assets/woodpecker_ci.png");
     expect(fallback.interface.logo).toBe("./assets/woodpecker_ci.png");
   });
+
+  test("declares the starter prompt in the portable root manifest", async () => {
+    const plugin = await readJson("plugin.json");
+    const portableInterface = plugin.extensions["com.openai"].interface;
+
+    expect(portableInterface.defaultPrompt).toEqual(["Inspect the current Woodpecker CI status."]);
+  });
 });

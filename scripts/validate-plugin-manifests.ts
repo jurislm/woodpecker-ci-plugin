@@ -21,6 +21,10 @@ export async function validatePluginManifests(): Promise<void> {
   if (!validateMcp(mcp)) throw new Error("mcp.json: " + ajv.errorsText(validateMcp.errors));
 
   if (plugin.name !== "woodpecker-ci") throw new Error("plugin.json has the wrong name");
+  const portableInterface = plugin.extensions?.["com.openai"]?.interface;
+  if (!Array.isArray(portableInterface?.defaultPrompt) || portableInterface.defaultPrompt.length === 0) {
+    throw new Error("plugin.json must define a portable defaultPrompt");
+  }
   if (typeof packageJson.version !== "string" || packageJson.version.length === 0) {
     throw new Error("package.json must contain a version");
   }

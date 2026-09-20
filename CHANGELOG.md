@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.2...v1.1.3) (2026-09-20)
+
+
+### Bug Fixes
+
+* label Woodpecker marketplace as a plugin ([#11](https://github.com/jurislm/woodpecker-ci-plugin/issues/11)) ([1d50f1e](https://github.com/jurislm/woodpecker-ci-plugin/commit/1d50f1e34d4b191757016e9ce931ee489b51d322))
+
 ## [1.1.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.1...v1.1.2) (2026-09-18)
 
 

@@ -1,7 +1,7 @@
 {
   "name": "jurislm-woodpecker",
   "interface": {
-    "displayName": "Woodpecker CI"
+    "displayName": "Woodpecker CI Plugin"
   },
   "plugins": [
     {

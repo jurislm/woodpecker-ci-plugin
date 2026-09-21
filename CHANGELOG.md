@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.4...v1.1.5) (2026-09-21)
+
+
+### Bug Fixes
+
+* use a provider-owned marketplace name ([ad03200](https://github.com/jurislm/woodpecker-ci-plugin/commit/ad032003d3b794ac893f18f57303592df2687869))
+* use a provider-owned marketplace name ([5bc3afd](https://github.com/jurislm/woodpecker-ci-plugin/commit/5bc3afd0dcd2e056cf11fee23668a6a504ced8ab))
+
 ## [1.1.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.3...v1.1.4) (2026-09-21)
 
 

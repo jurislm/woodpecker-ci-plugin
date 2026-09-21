@@ -1,5 +1,5 @@
 {
-  "name": "jurislm-woodpecker",
+  "name": "woodpecker-ci-marketplace",
   "interface": {
     "displayName": "Woodpecker CI Plugin"
   },

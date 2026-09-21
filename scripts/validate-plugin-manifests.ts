@@ -25,9 +25,6 @@ export async function validatePluginManifests(): Promise<void> {
   if (!Array.isArray(portableInterface?.defaultPrompt) || portableInterface.defaultPrompt.length === 0) {
     throw new Error("plugin.json must define a portable defaultPrompt");
   }
-  if (plugin.skills !== "./skills/" || plugin.mcpServers !== "./mcp.json") {
-    throw new Error("plugin.json must expose the portable skills and MCP registrations");
-  }
   if (typeof packageJson.version !== "string" || packageJson.version.length === 0) {
     throw new Error("package.json must contain a version");
   }

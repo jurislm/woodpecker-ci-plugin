@@ -29,14 +29,12 @@ describe("portable Woodpecker Plugin package", () => {
     expect(portableInterface.defaultPrompt).toEqual(["Inspect the current Woodpecker CI status."]);
   });
 
-  test("registers root skills and the portable MCP config", async () => {
+  test("keeps the root manifest within the portable Agent Plugins schema", async () => {
     const plugin = await readJson("plugin.json");
-    const mcp = await readJson("mcp.json");
-    const localMcp = await readJson(".mcp.json");
 
-    expect(plugin.skills).toBe("./skills/");
-    expect(plugin.mcpServers).toBe("./mcp.json");
-    expect(mcp.mcpServers).toEqual(localMcp.mcpServers);
+    expect(plugin.$schema).toBe("https://agent-plugins.org/schemas/1.0.0/plugin.schema.json");
+    expect(plugin.skills).toBeUndefined();
+    expect(plugin.mcpServers).toBeUndefined();
   });
 
   test("uses a provider-owned marketplace name", async () => {

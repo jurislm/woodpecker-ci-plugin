@@ -86,7 +86,7 @@ bun run manifest:check
 
 For local Codex marketplace testing, add the repository marketplace at
 `.agents/plugins/marketplace.json`, then install `woodpecker-ci` from the
-`jurislm-woodpecker` marketplace.
+`woodpecker-ci-marketplace` marketplace.
 
 ## Release automation
 

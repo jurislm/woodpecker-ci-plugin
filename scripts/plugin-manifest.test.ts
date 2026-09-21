@@ -38,4 +38,11 @@ describe("portable Woodpecker Plugin package", () => {
     expect(plugin.mcpServers).toBe("./mcp.json");
     expect(mcp.mcpServers).toEqual(localMcp.mcpServers);
   });
+
+  test("uses a provider-owned marketplace name", async () => {
+    const marketplace = JSON.parse(await readFile(".agents/plugins/marketplace.json", "utf8")) as Record<string, any>;
+
+    expect(marketplace.name).toBe("woodpecker-ci-marketplace");
+    expect(marketplace.plugins[0].name).toBe("woodpecker-ci");
+  });
 });

@@ -38,9 +38,11 @@ describe("portable Woodpecker Plugin package", () => {
   });
 
   test("uses a provider-owned marketplace name", async () => {
+    const plugin = await readJson("plugin.json");
     const marketplace = JSON.parse(await readFile(".agents/plugins/marketplace.json", "utf8")) as Record<string, any>;
 
     expect(marketplace.name).toBe("woodpecker-ci-marketplace");
+    expect(marketplace.interface.displayName).toBe(plugin.extensions["com.openai"].interface.displayName);
     expect(marketplace.plugins[0].name).toBe("woodpecker-ci");
   });
 });

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.3...v1.1.4) (2026-09-21)
+
+
+### Bug Fixes
+
+* register root MCP plugin mappings ([11a2ece](https://github.com/jurislm/woodpecker-ci-plugin/commit/11a2ececdfcdd4c0bfe28a0c9931b95930152935))
+* register root MCP plugin mappings ([5e73197](https://github.com/jurislm/woodpecker-ci-plugin/commit/5e73197aa455daa5ef46cd292cfbb592298c3acf))
+
 ## [1.1.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.2...v1.1.3) (2026-09-20)
 
 

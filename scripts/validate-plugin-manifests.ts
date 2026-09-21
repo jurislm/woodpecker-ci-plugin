@@ -25,6 +25,9 @@ export async function validatePluginManifests(): Promise<void> {
   if (!Array.isArray(portableInterface?.defaultPrompt) || portableInterface.defaultPrompt.length === 0) {
     throw new Error("plugin.json must define a portable defaultPrompt");
   }
+  if (plugin.skills !== "./skills/" || plugin.mcpServers !== "./mcp.json") {
+    throw new Error("plugin.json must expose the portable skills and MCP registrations");
+  }
   if (typeof packageJson.version !== "string" || packageJson.version.length === 0) {
     throw new Error("package.json must contain a version");
   }
@@ -47,6 +50,9 @@ export async function validatePluginManifests(): Promise<void> {
   }
   if (!localMcp.mcpServers?.["woodpecker-ci"]?.args?.includes("@jurislm/woodpecker-ci-plugin@latest")) {
     throw new Error(".mcp.json must use the latest published package");
+  }
+  if (JSON.stringify(mcp.mcpServers) !== JSON.stringify(localMcp.mcpServers)) {
+    throw new Error("mcp.json and .mcp.json must register the same MCP server");
   }
 
   const example = await readJson(".mcp.json.example");

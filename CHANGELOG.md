@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.7](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.6...v1.1.7) (2026-09-21)
+
+
+### Bug Fixes
+
+* align marketplace display name ([15fa39f](https://github.com/jurislm/woodpecker-ci-plugin/commit/15fa39fd3eb4e31095ccc6ae0e49ddb4a4ba9085))
+* align marketplace display name ([9519953](https://github.com/jurislm/woodpecker-ci-plugin/commit/9519953389e5b79534aeb07d40a104b7938e3b42))
+
 ## [1.1.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.5...v1.1.6) (2026-09-21)
 
 

@@ -19,6 +19,12 @@
     "version": {
       "type": "string"
     },
+    "skills": {
+      "type": "string"
+    },
+    "mcpServers": {
+      "type": "string"
+    },
     "description": {
       "type": "string"
     },

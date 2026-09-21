@@ -84,9 +84,9 @@ Validate the portable Plugin package with:
 bun run manifest:check
 ```
 
-For local Codex marketplace testing, add the repository marketplace at
-`.agents/plugins/marketplace.json`, then install `woodpecker-ci` from the
-`woodpecker-ci-marketplace` marketplace.
+This repository intentionally does not include a Codex repository marketplace
+catalog. The Plugin and MCP manifests remain available for direct packaging
+and local host installation.
 
 ## Release automation
 

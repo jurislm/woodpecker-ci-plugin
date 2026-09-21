@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.5...v1.1.6) (2026-09-21)
+
+
+### Bug Fixes
+
+* keep root manifest portable ([7ce5a99](https://github.com/jurislm/woodpecker-ci-plugin/commit/7ce5a99b6751b3551a779b32609154e3f8efa710))
+* keep root manifest portable ([5f13ced](https://github.com/jurislm/woodpecker-ci-plugin/commit/5f13ced9415c83f7fc9635a5030482b876421896))
+
 ## [1.1.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.4...v1.1.5) (2026-09-21)
 
 

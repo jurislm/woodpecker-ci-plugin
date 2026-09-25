@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.0...v2.0.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* accept live Woodpecker response shapes ([992414b](https://github.com/jurislm/woodpecker-ci-plugin/commit/992414b555e53d2d3f41aeb0dd04791047e65083))
+* accept live Woodpecker response shapes ([29dbfc4](https://github.com/jurislm/woodpecker-ci-plugin/commit/29dbfc495556c517569d4f4140dab68ee7c6dbab))
+
 ## [2.0.0](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.9...v2.0.0) (2026-09-25)
 
 

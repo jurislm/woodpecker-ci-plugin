@@ -1,0 +1,17 @@
+{
+  "name": "woodpecker-ci-plugin",
+  "owner": {
+    "name": "JurisLM"
+  },
+  "metadata": {
+    "description": "JurisLM's Woodpecker CI plugin for Cursor."
+  },
+  "plugins": [
+    {
+      "name": "woodpecker-ci",
+      "source": ".",
+      "description": "Inspect and manage Woodpecker CI repositories, pipelines, agents, and configuration.",
+      "logo": "assets/woodpecker_ci.png"
+    }
+  ]
+}

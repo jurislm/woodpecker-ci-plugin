@@ -1,0 +1,39 @@
+{
+  "name": "woodpecker-ci",
+  "displayName": "Woodpecker CI Plugin",
+  "description": "Inspect and manage Woodpecker CI repositories, pipelines, agents, and configuration.",
+  "author": {
+    "name": "JurisLM"
+  },
+  "homepage": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "license": "MIT",
+  "keywords": [
+    "woodpecker",
+    "ci",
+    "devops",
+    "mcp"
+  ],
+  "logo": "assets/woodpecker_ci.png",
+  "skills": "./skills/",
+  "mcpServers": "./.cursor-plugin/mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "WOODPECKER_URL": {
+        "type": "string",
+        "title": "Woodpecker API URL",
+        "description": "Base URL of your Woodpecker CI instance, including /api."
+      },
+      "WOODPECKER_API_TOKEN": {
+        "type": "string",
+        "title": "Woodpecker API token",
+        "description": "Personal access token for your Woodpecker CI instance."
+      }
+    },
+    "required": [
+      "WOODPECKER_URL",
+      "WOODPECKER_API_TOKEN"
+    ]
+  }
+}

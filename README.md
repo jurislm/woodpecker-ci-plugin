@@ -58,6 +58,7 @@ This repository also contains the portable Agent Plugin layer:
 - `mcp.json` — stdio MCP server configuration.
 - `.codex-plugin/plugin.json` — Codex compatibility fallback.
 - `.agents/plugins/marketplace.json` — repository-root Codex marketplace entry.
+- `.cursor-plugin/` — Cursor marketplace, plugin metadata, and MCP variables.
 - `.mcp.json.example` — local configuration example without secrets.
 - `skills/woodpecker-ci/SKILL.md` — service-specific tool-selection guidance.
 - `.mcp.json` — Codex MCP registration, matching the portable `mcp.json`.
@@ -81,6 +82,13 @@ server process environment. A GUI-launched Codex app may not inherit shell
 profile variables, so do not rely on `~/.zshenv` alone. Keep token values out
 of repository files. Open a new task after installing or updating the plugin
 so Codex loads its current tool catalog.
+
+## Cursor installation
+
+In Cursor, open Customize → Add Marketplace → Import from GitHub and enter
+`https://github.com/jurislm/woodpecker-ci-plugin`. Add Woodpecker CI Plugin,
+then use Configure to set `WOODPECKER_URL` and `WOODPECKER_API_TOKEN`. Cursor
+stores the values outside this repository.
 
 ## Development
 

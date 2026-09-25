@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.9...v2.0.0) (2026-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove credential lifecycle, debug pprof, and incompatible version tools; add pipeline inspection and validated response output.
+
+### Features
+
+* align Woodpecker MCP architecture with Hetzner ([a48ed1b](https://github.com/jurislm/woodpecker-ci-plugin/commit/a48ed1b4e278112b2197b2cfb803ad198c1c107b))
+
 ## [1.1.9](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.8...v1.1.9) (2026-09-25)
 
 

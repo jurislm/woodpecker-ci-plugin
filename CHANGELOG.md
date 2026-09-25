@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.8](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.7...v1.1.8) (2026-09-25)
+
+
+### Bug Fixes
+
+* restore Codex root marketplace manifest ([b0b2317](https://github.com/jurislm/woodpecker-ci-plugin/commit/b0b23174ce442ad4f266d4078622f16910023203))
+* restore Codex root marketplace manifest ([29f0427](https://github.com/jurislm/woodpecker-ci-plugin/commit/29f0427bf06eee49e75e5f93876beea116cf963c))
+
 ## [1.1.7](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.6...v1.1.7) (2026-09-21)
 
 

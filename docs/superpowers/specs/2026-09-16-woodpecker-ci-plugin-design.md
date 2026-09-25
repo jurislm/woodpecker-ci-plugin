@@ -1,5 +1,7 @@
 # Woodpecker CI Complete OpenAI Agent Plugin Design
 
+Historical packaging baseline. The current runtime and validation design is documented in `docs/superpowers/specs/2026-09-25-woodpecker-hetzner-architecture-alignment.md`.
+
 ## Goal
 
 Package the existing Woodpecker MCP server as a complete portable OpenAI Agent Plugin for private/local distribution. This scope is only Woodpecker CI; Coolify and Hetzner are handled elsewhere.

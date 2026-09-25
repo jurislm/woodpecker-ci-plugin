@@ -1,5 +1,7 @@
 # Woodpecker CI Complete OpenAI Plugin Implementation Plan
 
+Historical packaging plan. Current architecture alignment and runtime acceptance are tracked in `docs/superpowers/plans/2026-09-25-woodpecker-hetzner-architecture-alignment.md`.
+
 > **For agentic workers:** Implement task-by-task with TDD and verify every command and external readback before claiming completion.
 
 **Goal:** Package the existing Woodpecker stdio MCP server as a complete portable OpenAI Agent Plugin for private/local distribution.

@@ -14,14 +14,13 @@ type OpenApiDocument = {
 const inputPath = "openapi/woodpecker-dev.yaml";
 const outputDir = "src/generated";
 const typeOutput = outputDir + "/woodpecker-api.ts";
-const zodOutput = outputDir + "/woodpecker-zod.ts";
 const operationsOutput = outputDir + "/operations.ts";
-const contractOutput = "contracts/woodpecker-mcp-v1.json";
+const contractOutput = "contracts/woodpecker-mcp-v2.json";
 const methods = new Set(["get", "put", "post", "delete", "patch", "head", "options", "trace"]);
 const raw = await readFile(inputPath, "utf8");
 const document = YAML.parse(raw) as OpenApiDocument;
 const schemas = document.components?.schemas ?? {};
-const openapiManifest = JSON.parse(await readFile("openapi/manifest.json", "utf8")) as {
+const openapiManifest = JSON.parse(await readFile("api/manifest.json", "utf8")) as {
   sourceUrl: string;
   sha256: string;
   specVersion: string;
@@ -58,10 +57,56 @@ function dereference(value: any, seen = new Set<string>()): any {
   return result;
 }
 
-function schemaText(schema: any, fallback = "z.unknown()", optional = false): string {
+function omitSchemaProperties(value: any, omittedProperties: string[]): any {
+  if (Array.isArray(value)) return value.map((child) => omitSchemaProperties(child, omittedProperties));
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !omittedProperties.includes(key.toLowerCase()))
+      .map(([key, child]) => [key, omitSchemaProperties(child, omittedProperties)]),
+  );
+}
+
+function includesNull(value: any): boolean {
+  if (!value || typeof value !== "object") return false;
+  if (value.type === "null") return true;
+  return ["anyOf", "oneOf"].some((key) => Array.isArray(value[key]) && value[key].some(includesNull));
+}
+
+function compatibleResponseSchema(value: any): any {
+  if (Array.isArray(value)) return value.map(compatibleResponseSchema);
+  if (!value || typeof value !== "object") return value;
+  const result: JsonObject = {};
+  const required = new Set(Array.isArray(value.required) ? value.required : []);
+  for (const [key, child] of Object.entries(value)) {
+    if (key !== "properties" || !child || typeof child !== "object" || Array.isArray(child)) {
+      result[key] = compatibleResponseSchema(child);
+      continue;
+    }
+    result.properties = Object.fromEntries(Object.entries(child).map(([name, schema]) => {
+      let compatible = compatibleResponseSchema(schema);
+      if (name === "secret_extension_netrc" && compatible.type === "boolean") {
+        compatible = { anyOf: [compatible, { type: "string" }] };
+      }
+      if (!required.has(name) && !includesNull(compatible)) compatible = { anyOf: [compatible, { type: "null" }] };
+      return [name, compatible];
+    }));
+  }
+  return result;
+}
+
+function schemaText(
+  schema: any,
+  fallback = "z.unknown()",
+  optional = false,
+  omittedProperties = ["token"],
+  responseSchema = false,
+): string {
   if (!schema) return fallback;
   try {
-    const result = jsonSchemaToZod(dereference(schema), { noImport: true }).trim();
+    const dereferenced = omitSchemaProperties(dereference(schema), omittedProperties);
+    const compatible = responseSchema ? compatibleResponseSchema(dereferenced) : dereferenced;
+    const result = jsonSchemaToZod(compatible, { noImport: true }).trim();
     if (!optional || schema.default !== undefined || result.endsWith(".optional()")) return result;
     return result + ".optional()";
   } catch {
@@ -93,13 +138,20 @@ function toolName(summary: string, method: string, path: string, used: Set<strin
   return name;
 }
 
-function responseInfo(operation: JsonObject): { schema: string; kind: string } {
+function responseInfo(operation: JsonObject, path: string): { schema: string; kind: string } {
   const responses = operation.responses ?? {};
   const success = Object.entries(responses).find(([status]) => /^2\d\d$/u.test(status))?.[1] as JsonObject | undefined;
   const content = success?.content ?? {};
   const contentType = Object.keys(content)[0] ?? "application/json";
   if (contentType === "text/event-stream") return { schema: "z.array(z.unknown())", kind: "stream" };
-  if (contentType.includes("json")) return { schema: schemaText(content[contentType]?.schema), kind: "json" };
+  if (contentType.includes("json")) {
+    const omittedProperties = ["token", "password"];
+    if (path.includes("/secrets")) omittedProperties.push("value");
+    return {
+      schema: schemaText(content[contentType]?.schema, "z.unknown()", false, omittedProperties, true),
+      kind: "json",
+    };
+  }
   if (contentType.startsWith("text/") || contentType.includes("xml")) return { schema: "z.string()", kind: "text" };
   return { schema: "z.string()", kind: "binary" };
 }
@@ -110,6 +162,7 @@ const usedNames = new Set<string>();
 for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
   for (const [method, operationValue] of Object.entries(pathItem)) {
     if (!methods.has(method)) continue;
+    if (path === "/user/token" || path === "/version" || path.startsWith("/debug/pprof")) continue;
     const operation = operationValue as JsonObject;
     const parameters = [...(pathItem.parameters ?? []), ...(operation.parameters ?? [])] as JsonObject[];
     const properties: string[] = [];
@@ -135,13 +188,14 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
     const isStream = path.startsWith("/stream/");
     if (isStream) properties.push("duration_ms: z.number().int().min(1).max(30000).optional()");
 
-    const summary = String(operation.summary ?? method.toUpperCase() + " " + path);
+    const summary = String(operation.summary ?? method.toUpperCase() + " " + path).trim().replace(/[.!?]+$/u, "");
+    const description = summary + " for Woodpecker CI.";
     const name = toolName(summary, method, path, usedNames);
     usedNames.add(name);
     const inputSchema = properties.length === 0
       ? "z.object({})"
       : "z.object({ " + properties.join(", ") + " })";
-    const response = responseInfo(operation);
+    const response = responseInfo(operation, path);
     const destructive = method === "delete" || /delete|reset|revoke|remove|destroy/iu.test(summary);
     const annotationsValue = {
       readOnlyHint: method === "get" || method === "head",
@@ -160,6 +214,8 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
     const responseSchemaHash = sha256(response.schema);
     const operationContract = {
       name,
+      title: summary,
+      description,
       method: method.toUpperCase(),
       path,
       parameters: parameterContract,
@@ -173,9 +229,10 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
 
     operations.push(
       "  { name: " + quote(name) +
+      ", title: " + quote(summary) +
       ", method: " + quote(method.toUpperCase()) +
       ", path: " + quote(path) +
-      ", description: " + quote("Use this when an agent needs to " + summary.toLowerCase() + ".") +
+      ", description: " + quote(description) +
       ", inputSchema: " + inputSchema +
       ", responseSchema: " + response.schema +
       ", responseKind: " + quote(response.kind) +
@@ -188,22 +245,6 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
   }
 }
 
-const componentSchemas = Object.entries(schemas)
-  .map(([name, schema]) => "  " + quote(name) + ": " + schemaText(schema))
-  .join(",\n");
-await Bun.write(
-  zodOutput,
-  [
-    "// Generated by scripts/generate-openapi.ts.",
-    'import { z } from "zod";',
-    "",
-    "export const componentSchemas = {",
-    componentSchemas,
-    "} as const;",
-    "",
-  ].join("\n"),
-);
-
 await Bun.write(
   operationsOutput,
   [
@@ -212,6 +253,7 @@ await Bun.write(
     "",
     "export type GeneratedOperation = {",
     "  name: string;",
+    "  title: string;",
     "  method: string;",
     "  path: string;",
     "  description: string;",
@@ -236,7 +278,7 @@ await Bun.write(
   contractOutput,
   JSON.stringify(
     {
-      contractVersion: "1.0.0",
+      contractVersion: "2.0.0",
       package: "@jurislm/woodpecker-ci-plugin",
       generatedFrom: {
         sourceUrl: openapiManifest.sourceUrl,

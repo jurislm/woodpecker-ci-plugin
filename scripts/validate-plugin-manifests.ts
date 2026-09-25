@@ -15,6 +15,7 @@ export async function validatePluginManifests(): Promise<void> {
   const fallback = await readJson(".codex-plugin/plugin.json");
   const mcp = await readJson("mcp.json");
   const localMcp = await readJson(".mcp.json");
+  const marketplace = await readJson(".agents/plugins/marketplace.json");
   const packageJson = await readJson("package.json");
 
   if (!validatePlugin(plugin)) throw new Error("plugin.json: " + ajv.errorsText(validatePlugin.errors));
@@ -36,8 +37,8 @@ export async function validatePluginManifests(): Promise<void> {
   if (!fallback.interface || typeof fallback.interface !== "object") {
     throw new Error("Codex fallback must contain a direct interface object");
   }
-  if (fallback.skills !== "./skills/" || fallback.mcpServers !== "./.mcp.json" || fallback.apps !== "./.app.json") {
-    throw new Error("Codex fallback must reference skills, .mcp.json, and .app.json");
+  if (fallback.skills !== "./skills/" || fallback.mcpServers !== "./.mcp.json" || "apps" in fallback) {
+    throw new Error("Codex fallback must reference skills and .mcp.json without an empty app mapping");
   }
   const server = mcp.mcpServers?.["woodpecker-ci"];
   if (!server || server.type !== "stdio") throw new Error("mcp.json must define the woodpecker-ci stdio server");
@@ -50,6 +51,16 @@ export async function validatePluginManifests(): Promise<void> {
   }
   if (JSON.stringify(mcp.mcpServers) !== JSON.stringify(localMcp.mcpServers)) {
     throw new Error("mcp.json and .mcp.json must register the same MCP server");
+  }
+  const marketplacePlugin = marketplace.plugins?.[0];
+  if (marketplace.name !== "woodpecker-ci-marketplace" || marketplacePlugin?.name !== plugin.name) {
+    throw new Error("Repository marketplace must expose the Woodpecker plugin identity");
+  }
+  if (marketplacePlugin.source?.source !== "local" || marketplacePlugin.source.path !== "./") {
+    throw new Error("Repository marketplace must install the plugin from the repository root");
+  }
+  if (marketplace.interface?.displayName !== "Woodpecker CI Plugin") {
+    throw new Error("Repository marketplace display name must be Woodpecker CI Plugin");
   }
 
   const example = await readJson(".mcp.json.example");

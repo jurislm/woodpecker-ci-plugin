@@ -1,0 +1,20 @@
+{
+  "name": "woodpecker-ci-marketplace",
+  "interface": {
+    "displayName": "Woodpecker CI Plugin"
+  },
+  "plugins": [
+    {
+      "name": "woodpecker-ci",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer tools"
+    }
+  ]
+}

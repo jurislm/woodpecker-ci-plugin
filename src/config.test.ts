@@ -1,13 +1,16 @@
 import { describe, expect, test } from "bun:test";
-import { ConfigError, loadConfig } from "./config.js";
+import { loadConfig } from "./config.js";
 
 describe("loadConfig", () => {
-  test("requires the Woodpecker URL and token", () => {
-    expect(() => loadConfig({})).toThrow(ConfigError);
-    expect(() => loadConfig({ WOODPECKER_URL: "https://ci.example.com/api" })).toThrow(ConfigError);
+  test("allows MCP startup before provider configuration is available", () => {
+    expect(loadConfig({})).toEqual({
+      baseUrl: undefined,
+      token: undefined,
+      timeoutMs: 30_000,
+    });
   });
 
-  test("normalizes one trailing slash and rejects non-http URLs", () => {
+  test("normalizes a trailing slash and defers URL validation until a request", () => {
     expect(loadConfig({
       WOODPECKER_URL: "https://ci.example.com/api/",
       WOODPECKER_API_TOKEN: "secret",
@@ -16,16 +19,20 @@ describe("loadConfig", () => {
       token: "secret",
       timeoutMs: 30_000,
     });
-    expect(() => loadConfig({
+    expect(loadConfig({
       WOODPECKER_URL: "file:///tmp/api",
       WOODPECKER_API_TOKEN: "secret",
-    })).toThrow(ConfigError);
+    }).baseUrl).toBe("file:///tmp/api");
   });
 
   test("does not fall back to the legacy Drone token", () => {
-    expect(() => loadConfig({
+    expect(loadConfig({
       WOODPECKER_URL: "https://ci.example.com/api",
       DRONE_TOKEN: "legacy",
-    })).toThrow(ConfigError);
+    })).toEqual({
+      baseUrl: "https://ci.example.com/api",
+      token: undefined,
+      timeoutMs: 30_000,
+    });
   });
 });

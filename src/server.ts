@@ -1,9 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { WoodpeckerClient, WoodpeckerApiError } from "./client.js";
-import type { FetchLike } from "./client.js";
+import { createApiRequest, withApiErrorHandling } from "./api.js";
+import { WoodpeckerClient, redactSensitive, type FetchLike } from "./client.js";
 import type { WoodpeckerConfig } from "./config.js";
 import { operations } from "./generated/operations.js";
+import { registerPipelineTools } from "./tools/pipelines.js";
 import packageJson from "../package.json" with { type: "json" };
 
 const outputRequestSchema = z.object({
@@ -16,11 +17,12 @@ export function createServer(
   fetchImpl?: FetchLike,
 ): McpServer {
   const client = new WoodpeckerClient(config, fetchImpl);
+  const apiRequest = createApiRequest(client);
   const server = new McpServer(
     { name: "woodpecker-ci-plugin", version: packageJson.version },
     {
       instructions:
-        "Use read tools to resolve exact Woodpecker IDs and permissions before mutations. Never expose tokens or secret values in narration or logs.",
+        "Use read tools to resolve exact Woodpecker IDs and permissions before mutations. Never expose tokens or secret values in tool results, narration, or logs.",
     },
   );
 
@@ -28,7 +30,7 @@ export function createServer(
     server.registerTool(
       operation.name,
       {
-        title: operation.name,
+        title: operation.title,
         description: operation.description,
         inputSchema: operation.inputSchema,
         outputSchema: z.object({
@@ -38,11 +40,10 @@ export function createServer(
         }),
         annotations: operation.annotations,
       },
-      async (input) => {
-        try {
-          const envelope = await client.request(operation, input as Record<string, unknown>);
+      async (input) => withApiErrorHandling(async () => {
+          const envelope = await apiRequest(operation, input as Record<string, unknown>);
           const structuredContent = {
-            data: envelope.data,
+            data: redactSensitive(envelope.data),
             status: envelope.status,
             request: envelope.request,
           };
@@ -50,27 +51,10 @@ export function createServer(
             structuredContent,
             content: [{ type: "text" as const, text: JSON.stringify(structuredContent) }],
           };
-        } catch (error) {
-          const details = error instanceof WoodpeckerApiError
-            ? {
-                code: "WOODPECKER_API_ERROR",
-                status: error.status,
-                method: error.method,
-                path: error.path,
-                message: error.message,
-              }
-            : {
-                code: "WOODPECKER_TOOL_ERROR",
-                message: error instanceof Error ? error.message : String(error),
-              };
-          return {
-            isError: true,
-            content: [{ type: "text" as const, text: JSON.stringify({ error: details }) }],
-          };
-        }
-      },
+      }, [config.token]),
     );
   }
 
+  registerPipelineTools(server, apiRequest, [config.token]);
   return server;
 }

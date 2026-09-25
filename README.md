@@ -22,7 +22,7 @@ The server does not read `DRONE_TOKEN`.
 ```json
 {
   "mcpServers": {
-    "woodpecker": {
+    "woodpecker-ci": {
       "command": "bunx",
       "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
       "env": {
@@ -34,16 +34,21 @@ The server does not read `DRONE_TOKEN`.
 }
 ```
 
-The server exposes one MCP tool for each operation in the committed official
-Woodpecker OpenAPI snapshot. It is a local stdio package, not a hosted
-ChatGPT plugin endpoint.
+The server exposes generated OpenAPI operations plus a focused pipeline
+inspection tool. Personal-token lifecycle and pprof operations are excluded.
+The `/version` operation is also excluded because the configured Woodpecker
+instance returns its HTML app shell for that path instead of JSON.
+It is a local stdio package, not a hosted ChatGPT plugin endpoint.
 
-The current snapshot contains 118 operations. Generated tool names, input
-schemas, output schemas, and annotations live under `src/generated/`.
+Generated tool names, titles, descriptions, input schemas, output schemas, and
+annotations live under `src/generated/`. Token request fields are omitted;
+token and password fields, plus secret values, are omitted from responses.
 
-The v1 contract is frozen in `contracts/woodpecker-mcp-v1.json`: tool names,
-paths, annotations, environment names, structured output, and schema hashes
-are checked by `bun run api:check` and the generated contract tests.
+The current v2 generated-operation contract is in
+`contracts/woodpecker-mcp-v2.json`; the v1 contract remains as the previous
+compatibility snapshot. `api/manifest.json` is the canonical snapshot
+provenance. `bun run api:check` verifies its SHA-256, path and operation counts,
+then checks generated artifacts.
 
 ## OpenAI Plugin package
 
@@ -52,23 +57,43 @@ This repository also contains the portable Agent Plugin layer:
 - `plugin.json` — portable plugin identity and OpenAI presentation metadata.
 - `mcp.json` — stdio MCP server configuration.
 - `.codex-plugin/plugin.json` — Codex compatibility fallback.
+- `.agents/plugins/marketplace.json` — repository-root Codex marketplace entry.
 - `.mcp.json.example` — local configuration example without secrets.
 - `skills/woodpecker-ci/SKILL.md` — service-specific tool-selection guidance.
-- `.mcp.json` and `.app.json` — Codex compatibility companion files.
+- `.mcp.json` — Codex MCP registration, matching the portable `mcp.json`.
+- `.app.json.example` — empty Developer Mode mapping example.
 
 This version is private/local distribution. It does not provide a public
 HTTPS `/mcp` endpoint or OAuth flow.
+
+## Codex App installation
+
+From the repository root:
+
+```bash
+codex plugin marketplace add .
+codex plugin add woodpecker-ci@woodpecker-ci-marketplace
+```
+
+The server can initialize and list its tools before credentials are set.
+Provider calls require `WOODPECKER_URL` and `WOODPECKER_API_TOKEN` in the MCP
+server process environment. A GUI-launched Codex app may not inherit shell
+profile variables, so do not rely on `~/.zshenv` alone. Keep token values out
+of repository files. Open a new task after installing or updating the plugin
+so Codex loads its current tool catalog.
 
 ## Development
 
 ```bash
 bun install
 bun run api:fetch
-bun run api:generate
+bun run api:check
 bun run check
 ```
 
-`api:fetch` is the only command that updates the committed API snapshot.
+`api:fetch` updates the committed snapshot and canonical provenance at
+`api/manifest.json`. `api:check` verifies its hash and operation counts before
+checking generated artifacts.
 
 For a live read-only configuration check:
 
@@ -78,15 +103,12 @@ WOODPECKER_API_TOKEN=... \
 bun run smoke:read
 ```
 
-Validate the portable Plugin package with:
+Validate the portable Plugin manifests and npm package contents with:
 
 ```bash
 bun run manifest:check
+bun run package:check
 ```
-
-This repository intentionally does not include a Codex repository marketplace
-catalog. The Plugin and MCP manifests remain available for direct packaging
-and local host installation.
 
 ## Release automation
 
@@ -101,5 +123,7 @@ repository secret; PR pipelines never receive either release secret.
 
 ## Security
 
-Tokens are sent only as bearer authentication and are not included in logs or
-tool request metadata. Mutation requests are not retried automatically.
+The configured API token is sent only as bearer authentication and is not
+included in logs or tool request metadata. Credential fields are removed from
+response schemas and tool results. Mutation requests are not retried
+automatically.

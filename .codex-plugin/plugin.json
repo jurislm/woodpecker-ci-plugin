@@ -10,7 +10,6 @@
   "license": "MIT",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
-  "apps": "./.app.json",
   "interface": {
     "displayName": "Woodpecker CI",
     "shortDescription": "Manage Woodpecker CI through agent tools.",

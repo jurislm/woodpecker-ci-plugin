@@ -37,4 +37,17 @@ describe("portable Woodpecker Plugin package", () => {
     expect(plugin.mcpServers).toBeUndefined();
   });
 
+  test("exposes the repository-root plugin through the Codex marketplace", async () => {
+    const marketplace = await readJson(".agents/plugins/marketplace.json");
+    const fallback = await readJson(".codex-plugin/plugin.json");
+
+    expect(marketplace.interface.displayName).toBe("Woodpecker CI Plugin");
+    expect(marketplace.plugins[0]).toMatchObject({
+      name: "woodpecker-ci",
+      source: { source: "local", path: "./" },
+      category: "Developer tools",
+    });
+    expect(fallback.apps).toBeUndefined();
+  });
+
 });

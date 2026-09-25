@@ -85,4 +85,41 @@ describe("WoodpeckerClient", () => {
     await expect(client.request(operation({ method: "DELETE", path: "/repos/7" }), {}))
       .resolves.toMatchObject({ data: null, status: 204 });
   });
+
+  test("redacts credential-shaped fields from nested API responses", async () => {
+    const client = new WoodpeckerClient(config, async () => new Response(JSON.stringify({
+      token: "one-time-token",
+      registry: { password: "registry-password", username: "ci" },
+      details: { authorization: "Bearer other-token", value: "secret-value" },
+    }), { status: 200, headers: { "content-type": "application/json" } }));
+
+    const result = await client.request(operation(), {});
+    expect(result.data).toEqual({
+      token: "[REDACTED]",
+      registry: { password: "[REDACTED]", username: "ci" },
+      details: { authorization: "[REDACTED]", value: "secret-value" },
+    });
+  });
+
+  test("rejects dot-only path segments before making a request", async () => {
+    let called = false;
+    const client = new WoodpeckerClient(config, async () => {
+      called = true;
+      return new Response("{}", { status: 200, headers: { "content-type": "application/json" } });
+    });
+
+    await expect(client.request(operation({
+      path: "/repos/{repo_id}",
+      parameters: [{ location: "path", name: "repo_id" }],
+    }), { repo_id: ".." })).rejects.toThrow("Invalid dot-only path parameter: repo_id");
+    expect(called).toBe(false);
+  });
+
+  test("rejects credentials embedded in the Woodpecker URL", async () => {
+    const client = new WoodpeckerClient({ ...config, baseUrl: "https://user:password@ci.example.com/api" }, async () => {
+      throw new Error("fetch must not run for credential-bearing URLs");
+    });
+
+    await expect(client.request(operation(), {})).rejects.toMatchObject({ message: "WOODPECKER_URL must not include credentials" });
+  });
 });

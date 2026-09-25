@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.9](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.8...v1.1.9) (2026-09-25)
+
+
+### Bug Fixes
+
+* defer Woodpecker configuration until MCP tool calls ([0393759](https://github.com/jurislm/woodpecker-ci-plugin/commit/0393759726c21f6ff7b40baa415d8b88d0a18c8b))
+* defer Woodpecker configuration until tool calls ([0be252b](https://github.com/jurislm/woodpecker-ci-plugin/commit/0be252b1ed36e1cd6fcea35fdeeced6fa98588c7))
+
 ## [1.1.8](https://github.com/jurislm/woodpecker-ci-plugin/compare/v1.1.7...v1.1.8) (2026-09-25)
 
 

@@ -88,6 +88,9 @@ function compatibleResponseSchema(value: any): any {
       if (name === "secret_extension_netrc" && compatible.type === "boolean") {
         compatible = { anyOf: [compatible, { type: "string" }] };
       }
+      if (name === "data" && compatible.type === "array" && compatible.items?.type === "integer") {
+        compatible = { anyOf: [compatible, { type: "string" }] };
+      }
       if (!required.has(name) && !includesNull(compatible)) compatible = { anyOf: [compatible, { type: "null" }] };
       return [name, compatible];
     }));
@@ -105,7 +108,10 @@ function schemaText(
   if (!schema) return fallback;
   try {
     const dereferenced = omitSchemaProperties(dereference(schema), omittedProperties);
-    const compatible = responseSchema ? compatibleResponseSchema(dereferenced) : dereferenced;
+    let compatible = responseSchema ? compatibleResponseSchema(dereferenced) : dereferenced;
+    if (responseSchema && compatible.type === "array" && !includesNull(compatible)) {
+      compatible = { anyOf: [compatible, { type: "null" }] };
+    }
     const result = jsonSchemaToZod(compatible, { noImport: true }).trim();
     if (!optional || schema.default !== undefined || result.endsWith(".optional()")) return result;
     return result + ".optional()";
@@ -147,8 +153,14 @@ function responseInfo(operation: JsonObject, path: string): { schema: string; ki
   if (contentType.includes("json")) {
     const omittedProperties = ["token", "password"];
     if (path.includes("/secrets")) omittedProperties.push("value");
+    const declared = content[contentType]?.schema;
+    const resolved = dereference(declared);
+    const singularOrganization = path === "/orgs/{org_id}" || path === "/orgs/{org_id}/permissions";
+    const schema = singularOrganization && resolved?.type === "array" && resolved.items
+      ? { anyOf: [resolved, resolved.items, { type: "null" }] }
+      : declared;
     return {
-      schema: schemaText(content[contentType]?.schema, "z.unknown()", false, omittedProperties, true),
+      schema: schemaText(schema, "z.unknown()", false, omittedProperties, true),
       kind: "json",
     };
   }
@@ -172,7 +184,10 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
     for (const parameter of parameters) {
       if (parameter.in === "header") continue;
       const name = String(parameter.name);
-      properties.push(quote(name) + ": " + schemaText(parameter.schema ?? { type: "string" }, "z.unknown()", !parameter.required));
+      const schema = parameter.in === "path" && name === "org_id" && parameter.schema?.type === "string"
+        ? "z.union([z.string(), z.number().int()])"
+        : schemaText(parameter.schema ?? { type: "string" }, "z.unknown()", !parameter.required);
+      properties.push(quote(name) + ": " + schema);
       if (parameter.required) required.push(name);
       parameterMeta.push("{ location: " + quote(parameter.in) + ", name: " + quote(name) + " }");
     }

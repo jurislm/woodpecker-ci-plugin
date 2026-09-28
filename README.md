@@ -89,7 +89,7 @@ or this repository. Replace the example URL with your Woodpecker API URL:
 ```toml
 [mcp_servers.woodpecker-ci]
 command = "/bin/zsh"
-args = ["-c", "export WOODPECKER_URL=https://ci.example.com/api; exec bunx -y @jurislm/woodpecker-ci-plugin@latest"]
+args = ["-c", "exec /usr/bin/env -i HOME=\"$HOME\" PATH=\"$PATH\" TMPDIR=\"$TMPDIR\" WOODPECKER_URL=https://ci.example.com/api WOODPECKER_API_TOKEN=\"$WOODPECKER_API_TOKEN\" bunx -y @jurislm/woodpecker-ci-plugin@latest"]
 required = true
 startup_timeout_sec = 30
 ```

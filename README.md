@@ -89,12 +89,12 @@ or this repository. Replace the example URL with your Woodpecker API URL:
 ```toml
 [mcp_servers.woodpecker-ci]
 command = "/bin/zsh"
-args = ["-c", "exec /usr/bin/env -i HOME=\"$HOME\" PATH=\"$PATH\" TMPDIR=\"$TMPDIR\" WOODPECKER_URL=https://ci.example.com/api WOODPECKER_API_TOKEN=\"$WOODPECKER_API_TOKEN\" \"$HOME/.bun/bin/bunx\" -y @jurislm/woodpecker-ci-plugin@latest"]
+args = ["-c", "exec /usr/bin/python3 -c 'import os; keys=(\"HOME\",\"PATH\",\"TMPDIR\",\"WOODPECKER_API_TOKEN\"); env={k:os.environ[k] for k in keys if k in os.environ}; env[\"WOODPECKER_URL\"]=\"https://ci.example.com/api\"; path=env[\"HOME\"]+\"/.bun/bin/bunx\"; os.execve(path,[path,\"-y\",\"@jurislm/woodpecker-ci-plugin@latest\"],env)'"]
 required = true
 startup_timeout_sec = 30
 ```
 
-If Bun is installed elsewhere, replace `$HOME/.bun/bin/bunx` with its absolute path.
+This example needs `/usr/bin/python3` and Bun at `$HOME/.bun/bin/bunx`; replace either absolute path if needed. Python passes the token through `execve` environment, never a command argument.
 
 `required = true` waits for this MCP server during tool discovery. Check
 `codex mcp get woodpecker-ci`, then open a new Codex task and confirm that its

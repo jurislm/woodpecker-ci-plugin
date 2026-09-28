@@ -11,6 +11,7 @@ Use the Woodpecker MCP tools for live CI state and actions.
 - Use read-only tools before write tools.
 - Treat pipeline cancellation, deletion, token reset, secret changes, and repository changes as consequential.
 - Never expose WOODPECKER_API_TOKEN or credential fields from tool results in narration.
+- Pass tokens to local MCP processes through environment variables; never expand a token into command arguments.
 - Report source, pipeline number, commit SHA, status, and API error status separately.
 
 ## Availability check

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.1...v2.0.2) (2026-09-28)
+
+
+### Bug Fixes
+
+* clarify Codex desktop MCP readiness ([92ca4fd](https://github.com/jurislm/woodpecker-ci-plugin/commit/92ca4fdeb5830cc533b21c06bebf7f9312718c61))
+* keep Woodpecker token out of process arguments ([527f2ed](https://github.com/jurislm/woodpecker-ci-plugin/commit/527f2ed61299055d39108481b0d03efd4ccb0e36))
+* limit credentials forwarded to MCP process ([c2eba29](https://github.com/jurislm/woodpecker-ci-plugin/commit/c2eba29363f762fe348a8fa795b0c759c2578fd7))
+* make Codex desktop MCP readiness checks explicit ([79b99a4](https://github.com/jurislm/woodpecker-ci-plugin/commit/79b99a45a23bd096ea77e44ab07da01ee3aaf42f))
+* use absolute Bun path in desktop MCP example ([69c0c61](https://github.com/jurislm/woodpecker-ci-plugin/commit/69c0c6150892ab46cae30557febc80ca85c1f494))
+
 ## [2.0.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.0...v2.0.1) (2026-09-25)
 
 

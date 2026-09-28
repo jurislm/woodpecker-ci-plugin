@@ -78,10 +78,27 @@ codex plugin add woodpecker-ci@woodpecker-ci-marketplace
 
 The server can initialize and list its tools before credentials are set.
 Provider calls require `WOODPECKER_URL` and `WOODPECKER_API_TOKEN` in the MCP
-server process environment. A GUI-launched Codex app may not inherit shell
-profile variables, so do not rely on `~/.zshenv` alone. Keep token values out
-of repository files. Open a new task after installing or updating the plugin
-so Codex loads its current tool catalog.
+server process environment. A desktop app launched by macOS does not read your
+interactive shell configuration. Check the MCP child process, not the terminal,
+when diagnosing missing credentials.
+
+If an existing `~/.zshenv` exports the token, this local Codex configuration
+launches the MCP server through zsh without copying the token into Codex config
+or this repository. Replace the example URL with your Woodpecker API URL:
+
+```toml
+[mcp_servers.woodpecker-ci]
+command = "/bin/zsh"
+args = ["-c", "export WOODPECKER_URL=https://ci.example.com/api; exec bunx -y @jurislm/woodpecker-ci-plugin@latest"]
+required = true
+startup_timeout_sec = 30
+```
+
+`required = true` waits for this MCP server during tool discovery. Check
+`codex mcp get woodpecker-ci`, then open a new Codex task and confirm that its
+Woodpecker tools are present and an authenticated read succeeds. A successful
+local stdio check alone does not verify the task's tool catalog. Keep token
+values out of repository files and diagnostic output.
 
 ## Cursor installation
 

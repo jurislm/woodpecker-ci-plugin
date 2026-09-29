@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A local MCP server for inspecting and managing Woodpecker CI from Codex and Cursor.">
+    <meta name="description" content="A Woodpecker CI guidance skill backed by a local stdio MCP server for Codex and Cursor.">
     <meta name="theme-color" content="#f4f4ee">
     <link rel="canonical" href="https://jurislm.github.io/woodpecker-ci-plugin/">
     <link rel="icon" href="./assets/woodpecker_ci.svg" type="image/svg+xml">
     <link rel="stylesheet" href="./styles.css">
-    <title>Woodpecker CI Plugin — local MCP for Codex and Cursor</title>
+    <title>Woodpecker CI Plugin — guidance skill and local MCP for Codex and Cursor</title>
   </head>
   <body>
     <header class="site-header">
@@ -31,10 +31,10 @@
       <section class="hero page-width" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> WOODPECKER CI × MCP</p>
-          <h1 id="hero-title">CI operations,<br>inside your AI tools.</h1>
-          <p class="hero-lede">A local MCP server for inspecting and managing Woodpecker CI from Codex and Cursor.</p>
+          <h1 id="hero-title">Woodpecker CI<br>for Codex &amp; Cursor.</h1>
+          <p class="hero-lede">A Woodpecker CI guidance skill backed by a local stdio MCP server.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#install">Set it up <span aria-hidden="true">↓</span></a>
+            <a class="button button-primary" href="#install">Get started <span aria-hidden="true">↓</span></a>
             <a class="button button-secondary" href="https://github.com/jurislm/woodpecker-ci-plugin">View source <span aria-hidden="true">↗</span></a>
           </div>
           <div class="hero-facts" aria-label="Plugin details">
@@ -57,7 +57,7 @@
             <span class="env-value env-placeholder">set in your MCP host</span>
           </div>
           <div class="connection-rule"></div>
-          <p>Your token is read from the MCP server process environment. The example URL is a placeholder.</p>
+          <p>The MCP server reads your token from its process environment. The example URL is a placeholder.</p>
         </aside>
       </section>
 
@@ -69,17 +69,17 @@
         <div class="feature-grid">
           <article class="feature-card feature-card-lime">
             <span class="feature-index">01</span>
-            <h3>Inspect runs</h3>
+            <h3>Inspect CI activity</h3>
             <p>Browse repositories, pipelines, build logs, agents, and system state.</p>
           </article>
           <article class="feature-card feature-card-blue">
             <span class="feature-index">02</span>
-            <h3>Take action</h3>
+            <h3>Manage resources</h3>
             <p>Use supported read and write operations for Woodpecker CI resources, including secrets.</p>
           </article>
           <article class="feature-card feature-card-paper">
             <span class="feature-index">03</span>
-            <h3>Keep it local</h3>
+            <h3>Run it locally</h3>
             <p>The MCP server runs on your machine and connects to the Woodpecker API you configure.</p>
           </article>
         </div>
@@ -104,7 +104,7 @@
 cd woodpecker-ci-plugin
 codex plugin marketplace add .
 codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
-            <p class="install-note">Set <code>WOODPECKER_URL</code> and <code>WOODPECKER_API_TOKEN</code> in the MCP server process environment.</p>
+            <p class="install-note">Set <code>WOODPECKER_URL</code> and <code>WOODPECKER_API_TOKEN</code> in the MCP server process environment. The macOS Codex app does not inherit interactive shell settings; see the full setup guide below.</p>
           </article>
           <article class="install-card">
             <div class="install-card-heading">
@@ -125,7 +125,7 @@ codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
         <details class="mcp-config">
           <summary>Use a direct MCP configuration</summary>
           <div class="config-content">
-            <p>For other MCP hosts, run the published package with Bunx and set credentials in that host's protected environment settings.</p>
+            <p>For other MCP hosts, run the published package with <code>bunx</code> and set credentials in the MCP server environment. Do not commit credential values.</p>
             <pre><code>{
   "mcpServers": {
     "woodpecker-ci": {
@@ -146,11 +146,11 @@ codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
       <section class="security-section page-width" id="security" aria-labelledby="security-title">
         <div class="security-copy">
           <p class="eyebrow">SECURITY & LIMITS</p>
-          <h2 id="security-title">Your token stays with your MCP host.</h2>
-          <p>The server sends the token as bearer authentication. It is not included in logs or tool metadata, and secret values are removed from tool results. Keep credentials in your MCP host environment; never commit them to this repository.</p>
+          <h2 id="security-title">Configure credentials in your MCP server environment.</h2>
+          <p>The server sends the token to your configured Woodpecker API as a Bearer token. It does not log the token or include it in MCP tool request metadata. Recognized credential fields in structured JSON responses are replaced with <code>[REDACTED]</code>. Keep credentials out of checked-in files.</p>
         </div>
         <ul class="security-facts">
-          <li><span aria-hidden="true">01</span> No hosted <code>/mcp</code> endpoint</li>
+          <li><span aria-hidden="true">01</span> No hosted HTTPS <code>/mcp</code> endpoint</li>
           <li><span aria-hidden="true">02</span> No OAuth flow</li>
           <li><span aria-hidden="true">03</span> <code>DRONE_TOKEN</code> is not used</li>
         </ul>

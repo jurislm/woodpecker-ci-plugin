@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.2...v2.0.3) (2026-09-29)
+
+
+### Documentation
+
+* clarify Woodpecker API endpoint details ([8f08b0e](https://github.com/jurislm/woodpecker-ci-plugin/commit/8f08b0eb3fc5a024955020f5cee48d734bb41abc))
+* clarify Woodpecker plugin guidance ([a256bdc](https://github.com/jurislm/woodpecker-ci-plugin/commit/a256bdc248c453ede8994f3263a4855d96ed2d39))
+* clarify Woodpecker plugin guidance ([ceda121](https://github.com/jurislm/woodpecker-ci-plugin/commit/ceda121091ea3ae8fd4cd34b1199d29f48db93dd))
+
 ## [2.0.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.1...v2.0.2) (2026-09-28)
 
 

@@ -865,6 +865,10 @@ pre {
     background: #2b352f;
   }
 
+  .button-primary {
+    background: #151b18;
+  }
+
   .install-heading code,
   .install-note code,
   .steps-list code {

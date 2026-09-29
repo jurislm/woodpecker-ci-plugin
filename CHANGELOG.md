@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.3...v2.0.4) (2026-09-29)
+
+
+### Bug Fixes
+
+* **site:** preserve dark mode contrast ([464a6bf](https://github.com/jurislm/woodpecker-ci-plugin/commit/464a6bf069ab275ee98bcef2b76b3756a2756192))
+
+
+### Documentation
+
+* **site:** add official bilingual GitHub Pages site ([27ba447](https://github.com/jurislm/woodpecker-ci-plugin/commit/27ba44784d277bd07740026bb593384df95461c9))
+* **site:** add official bilingual GitHub Pages site ([7bf30ea](https://github.com/jurislm/woodpecker-ci-plugin/commit/7bf30eac28d0accffa2df0452a0eb2fc9e6c1553))
+
 ## [2.0.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.2...v2.0.3) (2026-09-29)
 
 

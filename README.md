@@ -1,6 +1,7 @@
 # @jurislm/woodpecker-ci-plugin
 
-Local stdio MCP server for Woodpecker CI.
+One Woodpecker CI guidance skill backed by a local stdio MCP server. The skill
+guides safe tool selection; the server exposes the Woodpecker API.
 
 ## Requirements
 
@@ -35,9 +36,9 @@ The server does not read `DRONE_TOKEN`.
 ```
 
 The server exposes generated OpenAPI operations plus a focused pipeline
-inspection tool. Personal-token lifecycle and pprof operations are excluded.
-The `/version` operation is also excluded because the configured Woodpecker
-instance returns its HTML app shell for that path instead of JSON.
+inspection tool. It excludes `/user/token`, `/version`, and `/debug/pprof/*`.
+The configured Woodpecker instance returns its HTML app shell at `/version`,
+not JSON.
 It is a local stdio package, not a hosted ChatGPT plugin endpoint.
 
 Generated tool names, titles, descriptions, input schemas, output schemas, and

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.4...v2.0.5) (2026-09-29)
+
+
+### Documentation
+
+* **site:** refine bilingual official site copy ([5bd2802](https://github.com/jurislm/woodpecker-ci-plugin/commit/5bd2802009f9ab2c45272d6e702ae99f65b01a08))
+* **site:** refine bilingual official website copy ([156116c](https://github.com/jurislm/woodpecker-ci-plugin/commit/156116c6a109151c33d255ac023082499fd60272))
+
 ## [2.0.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.3...v2.0.4) (2026-09-29)
 
 

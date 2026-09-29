@@ -3,6 +3,8 @@
 One Woodpecker CI guidance skill backed by a local stdio MCP server. The skill
 guides safe tool selection; the server exposes the Woodpecker API.
 
+Official website: https://jurislm.github.io/woodpecker-ci-plugin/
+
 ## Requirements
 
 - Bun >= 1.1

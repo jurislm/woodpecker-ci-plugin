@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在 Codex 與 Cursor 中檢視和管理 Woodpecker CI 的本機 MCP 伺服器。">
+    <meta name="theme-color" content="#f4f4ee">
+    <link rel="canonical" href="https://jurislm.github.io/woodpecker-ci-plugin/zh-tw/">
+    <link rel="icon" href="../assets/woodpecker_ci.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Woodpecker CI Plugin — Codex 與 Cursor 的本機 MCP</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="../" aria-label="Woodpecker CI Plugin 首頁">
+        <img src="../assets/woodpecker_ci.svg" alt="" width="30" height="27">
+        <span>Woodpecker CI <span class="brand-light">Plugin</span></span>
+      </a>
+      <nav class="main-nav" aria-label="主要導覽">
+        <a href="#capabilities">功能</a>
+        <a href="#install">安裝</a>
+        <a href="#security">安全</a>
+      </nav>
+      <div class="header-actions">
+        <a class="language-link" href="../" lang="en">English</a>
+        <a class="header-github" href="https://github.com/jurislm/woodpecker-ci-plugin">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero page-width" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> WOODPECKER CI × MCP</p>
+          <h1 id="hero-title">讓 AI 工具<br>管理 Woodpecker CI</h1>
+          <p class="hero-lede">本機 MCP 伺服器，讓 Codex 與 Cursor 檢視和管理你的 Woodpecker CI。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#install">開始設定 <span aria-hidden="true">↓</span></a>
+            <a class="button button-secondary" href="https://github.com/jurislm/woodpecker-ci-plugin">查看原始碼 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-facts" aria-label="Plugin 資訊">
+            <span>本機 stdio MCP</span>
+            <span>Bun 1.1+</span>
+            <span>讀取與寫入工具</span>
+          </div>
+        </div>
+        <aside class="connection-card" aria-label="必要的環境設定">
+          <div class="connection-top">
+            <span class="connection-label">MCP SERVER 環境變數</span>
+            <span class="local-indicator"><span aria-hidden="true"></span> 本機</span>
+          </div>
+          <div class="env-row">
+            <span class="env-key">WOODPECKER_URL</span>
+            <span class="env-value">https://ci.example.com/api</span>
+          </div>
+          <div class="env-row">
+            <span class="env-key">WOODPECKER_API_TOKEN</span>
+            <span class="env-value env-placeholder">在 MCP 主機中設定</span>
+          </div>
+          <div class="connection-rule"></div>
+          <p>Token 從 MCP server process 環境讀取。網址僅為範例。</p>
+        </aside>
+      </section>
+
+      <section class="capabilities-section page-width" id="capabilities" aria-labelledby="capabilities-title">
+        <div class="section-heading">
+          <p class="eyebrow">功能</p>
+          <h2 id="capabilities-title">直接管理你現有的 CI 系統。</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card feature-card-lime">
+            <span class="feature-index">01</span>
+            <h3>檢視執行狀態</h3>
+            <p>查看 repositories、pipelines、build logs、agents 與系統狀態。</p>
+          </article>
+          <article class="feature-card feature-card-blue">
+            <span class="feature-index">02</span>
+            <h3>執行操作</h3>
+            <p>透過支援的讀取與寫入操作管理 Woodpecker CI 資源，包括 secrets。</p>
+          </article>
+          <article class="feature-card feature-card-paper">
+            <span class="feature-index">03</span>
+            <h3>保持本機執行</h3>
+            <p>MCP server 在你的電腦執行，連接你設定的 Woodpecker API。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="install-section page-width" id="install" aria-labelledby="install-title">
+        <div class="section-heading install-heading">
+          <p class="eyebrow">開始使用</p>
+          <h2 id="install-title">連接你的 MCP 主機。</h2>
+          <p>需要 Bun 1.1 以上版本，以及結尾為 <code>/api</code> 的 Woodpecker API 網址。</p>
+        </div>
+        <div class="install-grid">
+          <article class="install-card">
+            <div class="install-card-heading">
+              <span class="host-mark host-mark-codex" aria-hidden="true">C</span>
+              <div>
+                <h3>Codex App</h3>
+                <p>從 GitHub repository 安裝 plugin。</p>
+              </div>
+            </div>
+            <pre><code>git clone https://github.com/jurislm/woodpecker-ci-plugin.git
+cd woodpecker-ci-plugin
+codex plugin marketplace add .
+codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
+            <p class="install-note">在 MCP server process 環境設定 <code>WOODPECKER_URL</code> 和 <code>WOODPECKER_API_TOKEN</code>。</p>
+          </article>
+          <article class="install-card">
+            <div class="install-card-heading">
+              <span class="host-mark host-mark-cursor" aria-hidden="true">↗</span>
+              <div>
+                <h3>Cursor</h3>
+                <p>從 GitHub 匯入 plugin。</p>
+              </div>
+            </div>
+            <ol class="steps-list">
+              <li>開啟 <strong>Customize → Add Marketplace → Import from GitHub</strong>。</li>
+              <li>輸入 <code>jurislm/woodpecker-ci-plugin</code>，新增 Woodpecker CI Plugin。</li>
+              <li>在 plugin 設定中填入 Woodpecker 網址和 token。</li>
+            </ol>
+            <a class="text-link" href="https://github.com/jurislm/woodpecker-ci-plugin">前往 GitHub repository <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <details class="mcp-config">
+          <summary>直接設定 MCP server</summary>
+          <div class="config-content">
+            <p>其他 MCP 主機可用 Bunx 執行已發布的套件，並在主機的安全環境設定中提供憑證。</p>
+            <pre><code>{
+  "mcpServers": {
+    "woodpecker-ci": {
+      "command": "bunx",
+      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
+      "env": {
+        "WOODPECKER_URL": "https://ci.example.com/api",
+        "WOODPECKER_API_TOKEN": "..."
+      }
+    }
+  }
+}</code></pre>
+            <a class="text-link" href="https://www.npmjs.com/package/@jurislm/woodpecker-ci-plugin">查看 npm 套件 <span aria-hidden="true">↗</span></a>
+          </div>
+        </details>
+      </section>
+
+      <section class="security-section page-width" id="security" aria-labelledby="security-title">
+        <div class="security-copy">
+          <p class="eyebrow">安全與限制</p>
+          <h2 id="security-title">Token 留在 MCP 主機環境。</h2>
+          <p>伺服器以 bearer authentication 傳送 token。Token 不會出現在 logs 或 tool metadata，secrets 值也會從 tool results 移除。憑證只放在 MCP 主機環境，切勿提交到 repository。</p>
+        </div>
+        <ul class="security-facts">
+          <li><span aria-hidden="true">01</span> 不提供 hosted <code>/mcp</code> endpoint</li>
+          <li><span aria-hidden="true">02</span> 不提供 OAuth 流程</li>
+          <li><span aria-hidden="true">03</span> 不讀取 <code>DRONE_TOKEN</code></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer page-width">
+      <a class="brand footer-brand" href="../">
+        <img src="../assets/woodpecker_ci.svg" alt="" width="25" height="23">
+        <span>Woodpecker CI Plugin</span>
+      </a>
+      <p>MIT License 開源。</p>
+      <div class="footer-links">
+        <a href="https://github.com/jurislm/woodpecker-ci-plugin">GitHub</a>
+        <a href="https://github.com/jurislm/woodpecker-ci-plugin/blob/main/README.md">完整設定指南</a>
+        <a href="https://www.npmjs.com/package/@jurislm/woodpecker-ci-plugin">npm</a>
+      </div>
+    </footer>
+  </body>
+</html>

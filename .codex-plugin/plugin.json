@@ -22,7 +22,7 @@
     ],
     "composerIcon": "./assets/woodpecker_ci.png",
     "logo": "./assets/woodpecker_ci.png",
-    "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin",
+    "websiteURL": "https://jurislm.github.io/woodpecker-ci-plugin/",
     "defaultPrompt": "Inspect the current Woodpecker CI status."
   }
 }

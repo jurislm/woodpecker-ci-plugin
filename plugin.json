@@ -7,7 +7,7 @@
     "name": "JurisLM",
     "url": "https://github.com/jurislm"
   },
-  "homepage": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "homepage": "https://jurislm.github.io/woodpecker-ci-plugin/",
   "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
   "license": "MIT",
   "keywords": [
@@ -33,7 +33,7 @@
         ],
         "composerIcon": "./assets/woodpecker_ci.png",
         "logo": "./assets/woodpecker_ci.png",
-        "websiteURL": "https://github.com/jurislm/woodpecker-ci-plugin"
+        "websiteURL": "https://jurislm.github.io/woodpecker-ci-plugin/"
       }
     }
   }

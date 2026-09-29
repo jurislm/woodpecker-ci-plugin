@@ -36,9 +36,9 @@ The server does not read `DRONE_TOKEN`.
 ```
 
 The server exposes generated OpenAPI operations plus a focused pipeline
-inspection tool. It excludes `/user/token`, `/version`, and `/debug/pprof/*`.
-The configured Woodpecker instance returns its HTML app shell at `/version`,
-not JSON.
+inspection tool. It excludes `/user/token`, `/version`, and `/debug/pprof` plus
+its subpaths. The OpenAPI snapshot describes `/version` as JSON, but this
+configured instance serves its HTML app shell at `/api/version`.
 It is a local stdio package, not a hosted ChatGPT plugin endpoint.
 
 Generated tool names, titles, descriptions, input schemas, output schemas, and

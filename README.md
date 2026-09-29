@@ -2,6 +2,8 @@
 
 Local stdio MCP server for Woodpecker CI.
 
+Official website: https://jurislm.github.io/woodpecker-ci-plugin/
+
 ## Requirements
 
 - Bun >= 1.1

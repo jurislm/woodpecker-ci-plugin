@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A local MCP server for inspecting and managing Woodpecker CI from Codex and Cursor.">
+    <meta name="theme-color" content="#f4f4ee">
+    <link rel="canonical" href="https://jurislm.github.io/woodpecker-ci-plugin/">
+    <link rel="icon" href="./assets/woodpecker_ci.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Woodpecker CI Plugin — local MCP for Codex and Cursor</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Woodpecker CI Plugin home">
+        <img src="./assets/woodpecker_ci.svg" alt="" width="30" height="27">
+        <span>Woodpecker CI <span class="brand-light">Plugin</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#install">Install</a>
+        <a href="#security">Security</a>
+      </nav>
+      <div class="header-actions">
+        <a class="language-link" href="./zh-tw/" lang="zh-Hant">繁體中文</a>
+        <a class="header-github" href="https://github.com/jurislm/woodpecker-ci-plugin">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero page-width" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> WOODPECKER CI × MCP</p>
+          <h1 id="hero-title">CI operations,<br>inside your AI tools.</h1>
+          <p class="hero-lede">A local MCP server for inspecting and managing Woodpecker CI from Codex and Cursor.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#install">Set it up <span aria-hidden="true">↓</span></a>
+            <a class="button button-secondary" href="https://github.com/jurislm/woodpecker-ci-plugin">View source <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-facts" aria-label="Plugin details">
+            <span>Local stdio MCP</span>
+            <span>Bun 1.1+</span>
+            <span>Read and write tools</span>
+          </div>
+        </div>
+        <aside class="connection-card" aria-label="Required environment settings">
+          <div class="connection-top">
+            <span class="connection-label">SERVER ENVIRONMENT</span>
+            <span class="local-indicator"><span aria-hidden="true"></span> LOCAL</span>
+          </div>
+          <div class="env-row">
+            <span class="env-key">WOODPECKER_URL</span>
+            <span class="env-value">https://ci.example.com/api</span>
+          </div>
+          <div class="env-row">
+            <span class="env-key">WOODPECKER_API_TOKEN</span>
+            <span class="env-value env-placeholder">set in your MCP host</span>
+          </div>
+          <div class="connection-rule"></div>
+          <p>Your token is read from the MCP server process environment. The example URL is a placeholder.</p>
+        </aside>
+      </section>
+
+      <section class="capabilities-section page-width" id="capabilities" aria-labelledby="capabilities-title">
+        <div class="section-heading">
+          <p class="eyebrow">WHAT IT CAN DO</p>
+          <h2 id="capabilities-title">Work with the CI system you already run.</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card feature-card-lime">
+            <span class="feature-index">01</span>
+            <h3>Inspect runs</h3>
+            <p>Browse repositories, pipelines, build logs, agents, and system state.</p>
+          </article>
+          <article class="feature-card feature-card-blue">
+            <span class="feature-index">02</span>
+            <h3>Take action</h3>
+            <p>Use supported read and write operations for Woodpecker CI resources, including secrets.</p>
+          </article>
+          <article class="feature-card feature-card-paper">
+            <span class="feature-index">03</span>
+            <h3>Keep it local</h3>
+            <p>The MCP server runs on your machine and connects to the Woodpecker API you configure.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="install-section page-width" id="install" aria-labelledby="install-title">
+        <div class="section-heading install-heading">
+          <p class="eyebrow">GET STARTED</p>
+          <h2 id="install-title">Connect your MCP host.</h2>
+          <p>Use Bun 1.1 or newer and a Woodpecker API URL ending in <code>/api</code>.</p>
+        </div>
+        <div class="install-grid">
+          <article class="install-card">
+            <div class="install-card-heading">
+              <span class="host-mark host-mark-codex" aria-hidden="true">C</span>
+              <div>
+                <h3>Codex App</h3>
+                <p>Install the plugin from the repository.</p>
+              </div>
+            </div>
+            <pre><code>git clone https://github.com/jurislm/woodpecker-ci-plugin.git
+cd woodpecker-ci-plugin
+codex plugin marketplace add .
+codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
+            <p class="install-note">Set <code>WOODPECKER_URL</code> and <code>WOODPECKER_API_TOKEN</code> in the MCP server process environment.</p>
+          </article>
+          <article class="install-card">
+            <div class="install-card-heading">
+              <span class="host-mark host-mark-cursor" aria-hidden="true">↗</span>
+              <div>
+                <h3>Cursor</h3>
+                <p>Import the plugin from GitHub.</p>
+              </div>
+            </div>
+            <ol class="steps-list">
+              <li>Open <strong>Customize → Add Marketplace → Import from GitHub</strong>.</li>
+              <li>Enter <code>jurislm/woodpecker-ci-plugin</code> and add Woodpecker CI Plugin.</li>
+              <li>Set the Woodpecker URL and token in the plugin configuration.</li>
+            </ol>
+            <a class="text-link" href="https://github.com/jurislm/woodpecker-ci-plugin">Open the repository <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <details class="mcp-config">
+          <summary>Use a direct MCP configuration</summary>
+          <div class="config-content">
+            <p>For other MCP hosts, run the published package with Bunx and set credentials in that host's protected environment settings.</p>
+            <pre><code>{
+  "mcpServers": {
+    "woodpecker-ci": {
+      "command": "bunx",
+      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
+      "env": {
+        "WOODPECKER_URL": "https://ci.example.com/api",
+        "WOODPECKER_API_TOKEN": "..."
+      }
+    }
+  }
+}</code></pre>
+            <a class="text-link" href="https://www.npmjs.com/package/@jurislm/woodpecker-ci-plugin">View the npm package <span aria-hidden="true">↗</span></a>
+          </div>
+        </details>
+      </section>
+
+      <section class="security-section page-width" id="security" aria-labelledby="security-title">
+        <div class="security-copy">
+          <p class="eyebrow">SECURITY & LIMITS</p>
+          <h2 id="security-title">Your token stays with your MCP host.</h2>
+          <p>The server sends the token as bearer authentication. It is not included in logs or tool metadata, and secret values are removed from tool results. Keep credentials in your MCP host environment; never commit them to this repository.</p>
+        </div>
+        <ul class="security-facts">
+          <li><span aria-hidden="true">01</span> No hosted <code>/mcp</code> endpoint</li>
+          <li><span aria-hidden="true">02</span> No OAuth flow</li>
+          <li><span aria-hidden="true">03</span> <code>DRONE_TOKEN</code> is not used</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer page-width">
+      <a class="brand footer-brand" href="./">
+        <img src="./assets/woodpecker_ci.svg" alt="" width="25" height="23">
+        <span>Woodpecker CI Plugin</span>
+      </a>
+      <p>Open source under the MIT License.</p>
+      <div class="footer-links">
+        <a href="https://github.com/jurislm/woodpecker-ci-plugin">GitHub</a>
+        <a href="https://github.com/jurislm/woodpecker-ci-plugin/blob/main/README.md">Full setup guide</a>
+        <a href="https://www.npmjs.com/package/@jurislm/woodpecker-ci-plugin">npm</a>
+      </div>
+    </footer>
+  </body>
+</html>

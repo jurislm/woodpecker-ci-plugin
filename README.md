@@ -85,9 +85,28 @@ server process environment. A desktop app launched by macOS does not read your
 interactive shell configuration. Check the MCP child process, not the terminal,
 when diagnosing missing credentials.
 
-If an existing `~/.zshenv` exports the token, this local Codex configuration
-launches the MCP server through zsh without copying the token into Codex config
-or this repository. Replace the example URL with your Woodpecker API URL:
+The bundled `mcp.json` and `.mcp.json` intentionally have no `env` defaults:
+this plugin does not select a Woodpecker instance or store a token. The host
+must provide both variables to the actual server child process; exporting them
+in the host environment alone does not establish that they were forwarded to
+a plugin-bundled process. Do not add empty
+values or `${WOODPECKER_URL}` / `${WOODPECKER_API_TOKEN}` references to these
+files: Codex's portable MCP parser only expands `${PLUGIN_ROOT}` and
+`${PLUGIN_DATA}`, so ordinary environment references remain literal strings.
+
+The `[mcp_servers.woodpecker-ci]` entry in `~/.codex/config.toml` configures a
+user MCP registration. Reading that entry with `codex mcp get` does not prove
+that a plugin-provided server received the same environment. Verify an
+authenticated read through the tools registered in the target task.
+
+For authenticated Codex use, configure the user MCP registration below and
+disable the bundled server. Plugin installation alone provides tool discovery,
+not a verified credential route. If an existing `~/.zshenv` exports the token,
+this local Codex configuration
+launches a user MCP registration through zsh without copying the token into
+Codex config or this repository. Replace the example URL with your Woodpecker
+API URL. The plugin-scoped policy below disables the bundled server while
+keeping the guidance skill enabled:
 
 ```toml
 [mcp_servers.woodpecker-ci]
@@ -95,6 +114,9 @@ command = "/bin/zsh"
 args = ["-c", "exec /usr/bin/python3 -c 'import os; keys=(\"HOME\",\"PATH\",\"TMPDIR\",\"WOODPECKER_API_TOKEN\"); env={k:os.environ[k] for k in keys if k in os.environ}; env[\"WOODPECKER_URL\"]=\"https://ci.example.com/api\"; path=env[\"HOME\"]+\"/.bun/bin/bunx\"; os.execve(path,[path,\"-y\",\"@jurislm/woodpecker-ci-plugin@latest\"],env)'"]
 required = true
 startup_timeout_sec = 30
+
+[plugins."woodpecker-ci@woodpecker-ci-marketplace".mcp_servers.woodpecker-ci]
+enabled = false
 ```
 
 This example needs `/usr/bin/python3` and Bun at `$HOME/.bun/bin/bunx`; replace either absolute path if needed. Python passes the token through `execve` environment, never a command argument.

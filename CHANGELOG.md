@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.5...v2.0.6) (2026-09-30)
+
+
+### Documentation
+
+* clarify bundled MCP environment configuration ([#39](https://github.com/jurislm/woodpecker-ci-plugin/issues/39)) ([dce6787](https://github.com/jurislm/woodpecker-ci-plugin/commit/dce6787d34ae6f253687d07d3362ff8ab2768fd5))
+
 ## [2.0.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.4...v2.0.5) (2026-09-29)
 
 

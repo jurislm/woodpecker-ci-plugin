@@ -7,6 +7,14 @@ async function readJson(path: string): Promise<Record<string, any>> {
 }
 
 describe("portable Woodpecker Plugin package", () => {
+  test("forwards native connection variables without adding portable fields or defaults", async () => {
+    const portable = (await readJson("mcp.json")).mcpServers["woodpecker-ci"];
+    const native = (await readJson(".mcp.json")).mcpServers["woodpecker-ci"];
+    expect(native.env_vars).toEqual(["WOODPECKER_URL", "WOODPECKER_API_TOKEN"]);
+    expect(portable.env_vars).toBeUndefined();
+    expect(portable.env).toBeUndefined();
+  });
+
   test("passes Agent Plugins manifest validation", async () => {
     await expect(validatePluginManifests()).resolves.toBeUndefined();
   });

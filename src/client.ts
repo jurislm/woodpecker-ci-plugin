@@ -22,7 +22,7 @@ export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promis
 const sensitiveKey = /(real_?value|private_?key|token|secret|password|authorization|cookie|^wss_url$)/iu;
 
 export function redactSensitive<T>(value: T): T {
-  if (Array.isArray(value)) return value.map((item) => redactSensitive(item)) as T;
+  if (Array.isArray(value)) return (value as unknown[]).map((item) => redactSensitive(item)) as T;
   if (!value || typeof value !== "object") return value;
   if ((value as unknown as BinaryEnvelope).encoding === "base64" && typeof (value as unknown as BinaryEnvelope).value === "string") return value;
   return Object.fromEntries(Object.entries(value as Record<string, unknown>).map(([key, child]) => [
@@ -35,18 +35,29 @@ function pathValue(value: unknown, name: string): string {
   if (value === undefined || value === null) {
     throw new Error("Missing required path parameter: " + name);
   }
+  if (typeof value !== "string" && typeof value !== "number" && typeof value !== "boolean") {
+    throw new Error("Invalid path parameter: " + name);
+  }
   const segment = String(value);
   if (/^\.+$/u.test(segment)) throw new Error("Invalid dot-only path parameter: " + name);
   return encodeURIComponent(segment);
 }
 
+function queryValue(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") return String(value);
+  const encoded = JSON.stringify(value);
+  if (encoded === undefined) throw new Error("Invalid query parameter value");
+  return encoded;
+}
+
 function appendQuery(url: URL, name: string, value: unknown): void {
   if (value === undefined || value === null) return;
   if (Array.isArray(value)) {
-    for (const item of value) url.searchParams.append(name, String(item));
+    for (const item of value as unknown[]) url.searchParams.append(name, queryValue(item));
     return;
   }
-  url.searchParams.set(name, typeof value === "object" ? JSON.stringify(value) : String(value));
+  url.searchParams.set(name, queryValue(value));
 }
 
 function decodeBinary(bytes: ArrayBuffer, contentType: string): BinaryEnvelope {

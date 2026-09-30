@@ -6,7 +6,7 @@ steps:
   - name: verify
     image: oven/bun:1.3.14-alpine
     commands:
-      - apk add --no-cache git
+      - apk add --no-cache git zsh
       - bun install --frozen-lockfile
       - bun run check
       - bun scripts/check-release-tag.ts
@@ -16,7 +16,7 @@ steps:
       NPM_TOKEN:
         from_secret: npm_token
     commands:
-      - apk add --no-cache git
+      - apk add --no-cache git zsh
       - trap 'rm -f "$HOME/.npmrc"' EXIT
       - printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
       - bun publish --access public

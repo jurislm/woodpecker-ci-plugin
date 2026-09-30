@@ -45,3 +45,7 @@ with --ff-only after merge.
 - Ruling: scripts/tests use no-emit Bundler type resolution for Bun's supported
   TypeScript imports; production build retains NodeNext. Cost if wrong: adjust
   the check configuration, without changing shipped module behavior.
+- Ruling: startup syntax is checked before sourcing; source status 1 may be a
+  benign optional-file guard, so credentials decide usability. Reject status
+  greater than 1. Cost if wrong: a deliberate return 1 with already populated
+  credentials is treated as usable; no provider writes are performed at startup.

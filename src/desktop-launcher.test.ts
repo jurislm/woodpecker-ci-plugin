@@ -44,3 +44,16 @@ test("desktop launcher stops when the explicitly sourced startup file fails", ()
   expect(result.code).toBe(12);
   expect(result.stdout).toBe("");
 });
+
+test("desktop launcher accepts a benign optional-file guard after credentials are set", () => {
+  const result = runLauncher('export WOODPECKER_API_TOKEN=fixture-token\n[[ -f "$HOME/absent" ]] && source "$HOME/absent"\n', "https://ci.example.com/api");
+  expect(result.code).toBe(0);
+  expect(result.stdout).toBe('{"jsonrpc":"2.0"}\n');
+});
+
+test("desktop launcher rejects syntax errors before loading credentials", () => {
+  const result = runLauncher("export WOODPECKER_API_TOKEN=fixture-token\nif true; then\n", "https://ci.example.com/api");
+  expect(result.code).not.toBe(0);
+  expect(result.stdout).toBe("");
+  expect(result.stderr).not.toContain("fixture-token");
+});

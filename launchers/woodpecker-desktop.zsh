@@ -1,6 +1,11 @@
 #!/bin/zsh -f
 if [[ -r ${ZDOTDIR:-$HOME}/.zshenv ]]; then
-  source "${ZDOTDIR:-$HOME}/.zshenv" >/dev/null || exit $?
+  /bin/zsh -f -n "${ZDOTDIR:-$HOME}/.zshenv" || exit $?
+  startup_status=0
+  source "${ZDOTDIR:-$HOME}/.zshenv" >/dev/null || startup_status=$?
+  if (( startup_status > 1 )); then
+    exit "$startup_status"
+  fi
 fi
 if [[ -z ${WOODPECKER_API_TOKEN:-} ]]; then
   print -u2 -- 'WOODPECKER_API_TOKEN is required in the zsh startup environment'

@@ -40,7 +40,9 @@ pagination and partial-failure semantics, and binary/stream output behavior.
 Each local server ships `launchers/<provider>-desktop.zsh`. The host invokes it
 with `/bin/zsh -f`. It explicitly sources `${ZDOTDIR:-$HOME}/.zshenv`, suppresses
 startup stdout, preserves stderr, checks required credentials, and execs the
-absolute `$HOME/.bun/bin/bunx` path. Source failures must stop startup. Startup
+absolute `$HOME/.bun/bin/bunx` path. Preflight startup syntax; reject syntax
+errors and source status greater than 1. Status 1 may be a benign final
+optional-file guard; credential completeness still gates execution. Startup
 values may override inherited values, matching ordinary zsh source behavior.
 
 Retain only HOME, PATH, TMPDIR, LANG and the provider's supported connection

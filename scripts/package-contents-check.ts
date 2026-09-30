@@ -10,6 +10,7 @@ const packed = parseBunPackOutput(new TextDecoder().decode(result.stdout) + new 
 const paths = new Set(packed.paths);
 for (const path of [
   "dist/index.js",
+  "launchers/woodpecker-desktop.zsh",
   "README.md",
   "LICENSE",
   "assets/woodpecker_ci.png",

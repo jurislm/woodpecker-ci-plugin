@@ -21,6 +21,20 @@ function operation(overrides: Record<string, unknown> = {}) {
 }
 
 describe("WoodpeckerClient", () => {
+  test("rejects non-scalar path values before fetch", async () => {
+    let called = false;
+    const client = new WoodpeckerClient(config, async () => { called = true; return new Response("ok"); });
+    await expect(client.request(operation({ path: "/repos/{repo_id}", parameters: [{ location: "path", name: "repo_id" }] }), { repo_id: {} })).rejects.toThrow("Invalid path parameter: repo_id");
+    expect(called).toBe(false);
+  });
+
+  test("serializes object query items as JSON rather than object labels", async () => {
+    let result = "";
+    const client = new WoodpeckerClient(config, async (input) => { result = String(input); return new Response("ok"); });
+    await client.request(operation({ parameters: [{ location: "query", name: "filter" }] }), { filter: [{ branch: "main" }] });
+    expect(new URL(result).searchParams.get("filter")).toBe('{"branch":"main"}');
+  });
+
   test("sends bearer auth and decodes JSON", async () => {
     let request: { url: string; init?: RequestInit } | undefined;
     const client = new WoodpeckerClient(config, async (url, init) => {

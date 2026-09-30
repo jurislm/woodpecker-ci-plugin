@@ -1,16 +1,25 @@
 import Ajv2020 from "ajv/dist/2020.js";
 import { readFile } from "node:fs/promises";
 
-async function readJson(path: string): Promise<Record<string, any>> {
-  return JSON.parse(await readFile(path, "utf8")) as Record<string, any>;
+type PluginManifest = {
+  name: string;
+  version: string;
+  extensions?: Record<string, { interface?: { defaultPrompt?: string[] } }>;
+};
+type McpManifest = {
+  mcpServers?: Record<string, { type: string; command: string; args?: string[] }>;
+};
+
+async function readJson(path: string) {
+  return JSON.parse(await readFile(path, "utf8"));
 }
 
 export async function validatePluginManifests(): Promise<void> {
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   const pluginSchema = await readJson("schemas/plugin.schema.json");
   const mcpSchema = await readJson("schemas/mcp.schema.json");
-  const validatePlugin = ajv.compile(pluginSchema);
-  const validateMcp = ajv.compile(mcpSchema);
+  const validatePlugin = ajv.compile<PluginManifest>(pluginSchema);
+  const validateMcp = ajv.compile<McpManifest>(mcpSchema);
   const plugin = await readJson("plugin.json");
   const fallback = await readJson(".codex-plugin/plugin.json");
   const mcp = await readJson("mcp.json");
@@ -49,8 +58,13 @@ export async function validatePluginManifests(): Promise<void> {
   if (!localMcp.mcpServers?.["woodpecker-ci"]?.args?.includes("@jurislm/woodpecker-ci-plugin@latest")) {
     throw new Error(".mcp.json must use the latest published package");
   }
-  if (JSON.stringify(mcp.mcpServers) !== JSON.stringify(localMcp.mcpServers)) {
-    throw new Error("mcp.json and .mcp.json must register the same MCP server");
+  const nativeServer = localMcp.mcpServers["woodpecker-ci"];
+  const { env_vars: envVars, ...portableServer } = nativeServer;
+  if (JSON.stringify(envVars) !== JSON.stringify(["WOODPECKER_URL", "WOODPECKER_API_TOKEN"])) {
+    throw new Error(".mcp.json must forward the native Woodpecker connection variables");
+  }
+  if (JSON.stringify(server) !== JSON.stringify(portableServer) || Object.keys(localMcp.mcpServers).length !== 1) {
+    throw new Error("mcp.json and .mcp.json must agree except for native env_vars");
   }
   const marketplacePlugin = marketplace.plugins?.[0];
   if (marketplace.name !== "woodpecker-ci-marketplace" || marketplacePlugin?.name !== plugin.name) {

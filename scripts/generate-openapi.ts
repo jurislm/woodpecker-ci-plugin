@@ -195,7 +195,7 @@ for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
     const requestBody = operation.requestBody as JsonObject | undefined;
     const bodyContent = requestBody?.content ?? {};
     const bodyType = Object.keys(bodyContent)[0];
-    if (bodyType) {
+    if (bodyType && requestBody) {
       properties.push("body: " + schemaText(bodyContent[bodyType]?.schema, "z.unknown()", !requestBody.required));
       if (requestBody.required) required.push("body");
     }

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.6...v2.1.0) (2026-09-30)
+
+
+### Features
+
+* align Woodpecker desktop and plugin architecture ([#41](https://github.com/jurislm/woodpecker-ci-plugin/issues/41)) ([bea4371](https://github.com/jurislm/woodpecker-ci-plugin/commit/bea4371cc4ae20c2f9456ec6c27d9788950f2a93))
+
 ## [2.0.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.5...v2.0.6) (2026-09-30)
 
 

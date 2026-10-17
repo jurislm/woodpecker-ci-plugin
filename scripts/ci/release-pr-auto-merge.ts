@@ -17,9 +17,11 @@ const RELEASE_FILES = [
   ".codex-plugin/plugin.json",
 ] as const;
 const GITHUB_API = "https://api.github.com";
-const DEFAULT_MERGEABLE_ATTEMPTS = 6;
+// 120 × 5 秒 = 10 分鐘：涵蓋 update branch 後 Woodpecker 對新 head 重跑 push/ci 與 pr/ci 的排隊時間。
+const DEFAULT_MERGEABLE_ATTEMPTS = 120;
 const DEFAULT_POLL_DELAY_MS = 5_000;
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
+const REQUIRED_CHECK_CONTEXTS = ["ci/woodpecker/push/ci", "ci/woodpecker/pr/ci"] as const;
 
 type FetchLike = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
@@ -288,6 +290,35 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
     return requiredString(requiredRecord(value.object, "base branch ref.object").sha, "base branch ref.object.sha");
   }
 
+  async function waitForRequiredChecks(commit: string): Promise<void> {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const value = requiredRecord(
+        await githubRequest(`/repos/${REPOSITORY}/commits/${encodeURIComponent(commit)}/status`),
+        "commit status",
+      );
+      const statuses = value.statuses;
+      if (!Array.isArray(statuses)) throw new Error("commit status statuses must be an array");
+      let pending = false;
+      for (const context of REQUIRED_CHECK_CONTEXTS) {
+        const status = statuses.find((entry) => isRecord(entry) && entry.context === context);
+        if (!status) {
+          pending = true;
+          continue;
+        }
+        if (status.state === "failure" || status.state === "error") {
+          throw new Error(`required checks failed: ${context}`);
+        }
+        if (status.state !== "success" && status.state !== "pending") {
+          throw new Error(`invalid required check state: ${context}`);
+        }
+        if (status.state !== "success") pending = true;
+      }
+      if (!pending) return;
+      if (attempt < maxAttempts) await sleep(pollDelayMs);
+    }
+    throw new Error("required checks did not complete");
+  }
+
   const candidatePullNumber = options.candidatePullNumber;
   const query = new URLSearchParams({ state: "open", base: BASE_BRANCH, head: `jurislm:${RELEASE_BRANCH}`, per_page: "100" });
   const candidateValue = candidatePullNumber === undefined
@@ -297,15 +328,38 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
   if (!candidate) { logger.log("No open release-please Release PR found; nothing to merge."); return { status: "no-op" }; }
 
   const detailValue = await githubRequest(`/repos/${REPOSITORY}/pulls/${candidate.number}`);
-  const detail = selectReleaseCandidate([detailValue], { allowClosed: options.dryRun && candidatePullNumber !== undefined });
+  let detail = selectReleaseCandidate([detailValue], { allowClosed: options.dryRun && candidatePullNumber !== undefined });
   if (!detail || detail.headSha !== candidate.headSha || detail.baseSha !== candidate.baseSha) throw new Error("release PR changed before content validation");
+  let detailRecord = requiredRecord(detailValue, "pull request detail");
   if (!options.dryRun && options.expectedBaseSha && detail.baseSha !== options.expectedBaseSha) {
     const relation = await compareCommits(options.expectedBaseSha, detail.baseSha);
     if (relation === "ahead") { logger.log(`Release PR is based on a newer build; yielding to ${detail.baseSha}.`); return { status: "no-op" }; }
-    throw new Error(`release PR base SHA does not match CI commit (pr=${detail.baseSha}, ci=${options.expectedBaseSha}, relation=${relation})`);
+    if (relation !== "behind") {
+      throw new Error(`release PR base SHA does not match CI commit (pr=${detail.baseSha}, ci=${options.expectedBaseSha}, relation=${relation})`);
+    }
+    // release-please 回報 "PR remained the same" 時不會推 release 分支，PR base 就停在舊的 main。
+    logger.log(`Release PR #${detail.number} base is behind ${options.expectedBaseSha}; updating its branch.`);
+    await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}/update-branch`, {
+      method: "PUT",
+      body: JSON.stringify({ expected_head_sha: detail.headSha }),
+    });
+    let updated: { candidate: ReleaseCandidate; record: Record<string, unknown> } | null = null;
+    for (let attempt = 1; attempt <= maxAttempts && !updated; attempt += 1) {
+      if (attempt > 1) await sleep(pollDelayMs);
+      const value = await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}`);
+      const current = selectReleaseCandidate([value]);
+      if (!current || current.number !== detail.number) throw new Error("release PR changed during branch update");
+      if (current.headSha !== detail.headSha) updated = { candidate: current, record: requiredRecord(value, "pull request detail") };
+    }
+    if (!updated) throw new Error("release PR branch update did not produce a new head");
+    if (updated.candidate.baseSha !== options.expectedBaseSha) {
+      if (await mainSha() !== options.expectedBaseSha) { logger.log("main advanced during branch update; yielding to newer build."); return { status: "no-op" }; }
+      throw new Error(`release PR base SHA does not match CI commit after branch update (pr=${updated.candidate.baseSha})`);
+    }
+    detail = updated.candidate;
+    detailRecord = updated.record;
   }
 
-  const detailRecord = requiredRecord(detailValue, "pull request detail");
   const changedFileCount = detailRecord.changed_files;
   if (!Number.isSafeInteger(changedFileCount) || (changedFileCount as number) <= 0 || (changedFileCount as number) > 3000) throw new Error("invalid release PR shape: changed_files");
   const changedFiles: unknown[] = [];
@@ -336,6 +390,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
     baseChangelogText: files[8]!, headChangelogText: files[9]!,
   });
   if (options.dryRun) return { status: "validated", pullNumber: detail.number };
+  await waitForRequiredChecks(detail.headSha);
 
   let mergeable = false;
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {

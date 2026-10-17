@@ -51,7 +51,9 @@ export async function validatePluginManifests(): Promise<void> {
   }
   const server = mcp.mcpServers?.["woodpecker-ci"];
   if (!server || server.type !== "stdio") throw new Error("mcp.json must define the woodpecker-ci stdio server");
-  if (server.command !== "bunx") throw new Error("mcp.json must use bunx");
+  if (server.command !== "bun" || server.args?.[0] !== "x" || server.args.includes("-y")) {
+    throw new Error("mcp.json must launch with bun x (the bunx shim is not portable)");
+  }
   if (!server.args?.includes("@jurislm/woodpecker-ci-plugin@latest")) {
     throw new Error("mcp.json must use the latest published package");
   }

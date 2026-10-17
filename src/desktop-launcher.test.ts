@@ -9,8 +9,8 @@ function runLauncher(startup: string, url?: string) {
     const bin = join(home, ".bun/bin");
     mkdirSync(bin, { recursive: true });
     writeFileSync(join(home, ".zshenv"), startup);
-    const executable = join(bin, "bunx");
-    writeFileSync(executable, '#!/bin/sh\n[ "$WOODPECKER_API_TOKEN" = fixture-token ] || exit 11\n[ "$WOODPECKER_URL" = https://ci.example.com/api ] || exit 12\n[ -z "${UNRELATED_SECRET+x}" ] || exit 13\n[ -z "${PARENT_SECRET+x}" ] || exit 14\n[ -z "${SSH_AUTH_SOCK+x}" ] || exit 15\n[ "$1" = -y ] || exit 16\n[ "$2" = @jurislm/woodpecker-ci-plugin@latest ] || exit 17\ncat\n');
+    const executable = join(bin, "bun");
+    writeFileSync(executable, '#!/bin/sh\n[ "$WOODPECKER_API_TOKEN" = fixture-token ] || exit 11\n[ "$WOODPECKER_URL" = https://ci.example.com/api ] || exit 12\n[ -z "${UNRELATED_SECRET+x}" ] || exit 13\n[ -z "${PARENT_SECRET+x}" ] || exit 14\n[ -z "${SSH_AUTH_SOCK+x}" ] || exit 15\n[ "$1" = x ] || exit 16\n[ "$2" = @jurislm/woodpecker-ci-plugin@latest ] || exit 17\ncat\n');
     chmodSync(executable, 0o700);
     const result = Bun.spawnSync(["/bin/zsh", "-f", resolve("launchers/woodpecker-desktop.zsh")], {
       env: { HOME: home, ZDOTDIR: home, PATH: "/usr/bin:/bin", PARENT_SECRET: "fixture-parent", SSH_AUTH_SOCK: "/fixture-agent", ...(url ? { WOODPECKER_URL: url } : {}) },

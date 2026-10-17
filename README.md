@@ -26,8 +26,8 @@ The server does not read `DRONE_TOKEN`.
 {
   "mcpServers": {
     "woodpecker-ci": {
-      "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
+      "command": "bun",
+      "args": ["x", "@jurislm/woodpecker-ci-plugin@latest"],
       "env": {
         "WOODPECKER_URL": "https://ci.example.com/api",
         "WOODPECKER_API_TOKEN": "..."
@@ -36,6 +36,13 @@ The server does not read `DRONE_TOKEN`.
   }
 }
 ```
+
+Launch with `bun x` rather than the separate `bunx` executable, which some
+package-manager shims break. When `WOODPECKER_URL` or `WOODPECKER_API_TOKEN` is
+missing, empty, or an unsubstituted `${...}` placeholder, the server fills it
+from `~/.config/jurislm/plugin.env` (`KEY=value` or `export KEY=value` lines;
+override the path with `JURISLM_PLUGIN_ENV`). Host values always take
+precedence and values are never logged.
 
 The server exposes generated OpenAPI operations plus a focused pipeline
 inspection tool. It excludes `/user/token`, `/version`, and `/debug/pprof` plus
@@ -119,7 +126,7 @@ WOODPECKER_URL = "https://ci.example.com/api"
 enabled = false
 ```
 
-The launcher requires Bun at `$HOME/.bun/bin/bunx` and continues to use
+The launcher requires Bun at `$HOME/.bun/bin/bun`, runs `bun x`, and continues to use
 `@latest`. Read `initialize.serverInfo.version` and match the intended release;
 a marketplace cache version is not the resolved running package version.
 `codex mcp get` reads a user registration; it does not prove a plugin-provided

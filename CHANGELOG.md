@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.0...v2.1.1) (2026-10-17)
+
+
+### Bug Fixes
+
+* fill credential groups atomically from plugin env (JUR-753) ([b7cadaf](https://github.com/jurislm/woodpecker-ci-plugin/commit/b7cadaf1a2a872cf6c0b8bfdfaa8a8b50204a876))
+* launch with bun x and self-load plugin env (JUR-753) ([a1ae6a5](https://github.com/jurislm/woodpecker-ci-plugin/commit/a1ae6a554cf525c33b4debc86e72a53b49ea09a9))
+* launch with bun x and self-load plugin env (JUR-753) ([77ed0e3](https://github.com/jurislm/woodpecker-ci-plugin/commit/77ed0e311b2e404f0170b71324d1d346df584a18))
+
 ## [2.1.0](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.0.6...v2.1.0) (2026-09-30)
 
 

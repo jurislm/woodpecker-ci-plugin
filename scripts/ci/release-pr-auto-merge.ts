@@ -17,7 +17,6 @@ const RELEASE_FILES = [
   ".codex-plugin/plugin.json",
 ] as const;
 const GITHUB_API = "https://api.github.com";
-// 120 × 5 秒 = 10 分鐘：涵蓋 update branch 後 Woodpecker 對新 head 重跑 push/ci 與 pr/ci 的排隊時間。
 const DEFAULT_MERGEABLE_ATTEMPTS = 120;
 const DEFAULT_POLL_DELAY_MS = 5_000;
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
@@ -337,7 +336,6 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
     if (relation !== "behind") {
       throw new Error(`release PR base SHA does not match CI commit (pr=${detail.baseSha}, ci=${options.expectedBaseSha}, relation=${relation})`);
     }
-    // release-please 回報 "PR remained the same" 時不會推 release 分支，PR base 就停在舊的 main。
     logger.log(`Release PR #${detail.number} base is behind ${options.expectedBaseSha}; updating its branch.`);
     await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}/update-branch`, {
       method: "PUT",

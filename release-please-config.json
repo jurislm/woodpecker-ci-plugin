@@ -12,7 +12,7 @@
     { "type": "perf", "section": "Performance" },
     { "type": "docs", "section": "Documentation" },
     { "type": "refactor", "section": "Refactoring" },
-    { "type": "test", "section": "Tests" },
+    { "type": "test", "section": "Tests", "hidden": true },
     { "type": "chore", "section": "Maintenance", "hidden": true }
   ],
   "packages": {

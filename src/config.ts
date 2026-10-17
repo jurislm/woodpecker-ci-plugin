@@ -1,4 +1,4 @@
-export const CONFIG_VARIABLES = ["WOODPECKER_URL", "WOODPECKER_API_TOKEN"] as const;
+export const CREDENTIAL_GROUPS = [["WOODPECKER_URL", "WOODPECKER_API_TOKEN"]] as const;
 
 export interface WoodpeckerConfig {
   baseUrl: string | undefined;

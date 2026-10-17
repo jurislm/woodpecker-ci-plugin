@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 export type Environment = Record<string, string | undefined>;
+export type CredentialGroups = readonly (readonly string[])[];
 
 export const PLUGIN_ENV_PATH_VARIABLE = "JURISLM_PLUGIN_ENV";
 
@@ -14,7 +15,6 @@ function isUnset(value: string | undefined): boolean {
   return !trimmed || PLACEHOLDER.test(trimmed);
 }
 
-/** Parses a dotenv-style file (`KEY=value` or `export KEY=value`) without evaluating shell syntax. */
 export function parsePluginEnv(text: string): Record<string, string> {
   const values: Record<string, string> = {};
   for (const rawLine of text.split(/\r?\n/u)) {
@@ -33,36 +33,39 @@ export function parsePluginEnv(text: string): Record<string, string> {
 }
 
 export function pluginEnvPath(env: Environment): string {
+  const home = env.HOME?.trim() || homedir();
   const override = env[PLUGIN_ENV_PATH_VARIABLE];
-  if (override && !isUnset(override)) return override.trim();
-  return join(env.HOME?.trim() || homedir(), ".config", "jurislm", "plugin.env");
+  if (!override || isUnset(override)) return join(home, ".config", "jurislm", "plugin.env");
+  const path = override.trim();
+  return resolve(path === "~" || path.startsWith("~/") ? join(home, path.slice(1)) : path);
 }
 
-/**
- * Returns a copy of `env` where each named variable that is missing, empty, or an unsubstituted
- * `${...}` placeholder is filled from the JurisLM plugin env file. Real host values always win;
- * unresolved placeholders are dropped so callers report the variable as missing.
- */
-export function withPluginEnv(
-  env: Environment,
-  names: readonly string[],
-  readText: (path: string) => string = (path) => readFileSync(path, "utf8"),
-  warn: (message: string) => void = (message) => console.error(message),
-): Environment {
-  const missing = names.filter((name) => isUnset(env[name]));
-  if (missing.length === 0) return env;
-  let fileValues: Record<string, string> = {};
-  const path = pluginEnvPath(env);
+function readPluginEnv(path: string, readText: (path: string) => string, warn: (message: string) => void): Record<string, string> {
   try {
-    fileValues = parsePluginEnv(readText(path));
+    return parsePluginEnv(readText(path));
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code !== "ENOENT") warn(`Could not read plugin env file ${path} (${code ?? "unknown error"})`);
+    return {};
   }
+}
+
+export function withPluginEnv(
+  env: Environment,
+  groups: CredentialGroups,
+  readText: (path: string) => string = (path) => readFileSync(path, "utf8"),
+  warn: (message: string) => void = (message) => console.error(message),
+): Environment {
+  if (groups.every((group) => group.every((name) => !isUnset(env[name])))) return env;
+  const fileValues = groups.some((group) => group.every((name) => isUnset(env[name]))) ? readPluginEnv(pluginEnvPath(env), readText, warn) : {};
   const resolved: Environment = { ...env };
-  for (const name of missing) {
-    if (isUnset(fileValues[name])) delete resolved[name];
-    else resolved[name] = fileValues[name];
+  for (const group of groups) {
+    const fillFromFile = group.every((name) => isUnset(env[name]));
+    for (const name of group) {
+      if (!isUnset(env[name])) continue;
+      if (fillFromFile && !isUnset(fileValues[name])) resolved[name] = fileValues[name];
+      else delete resolved[name];
+    }
   }
   return resolved;
 }

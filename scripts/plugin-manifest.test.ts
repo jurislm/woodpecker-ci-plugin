@@ -15,6 +15,13 @@ describe("portable Woodpecker Plugin package", () => {
     expect(portable.env).toBeUndefined();
   });
 
+  test("launches through bun x in every shipped MCP configuration instead of the bunx shim", async () => {
+    for (const file of ["mcp.json", ".mcp.json", ".mcp.json.example", ".cursor-plugin/mcp.json"]) {
+      const server = (await readJson(file)).mcpServers["woodpecker-ci"];
+      expect({ file, command: server.command, args: server.args }).toEqual({ file, command: "bun", args: ["x", "@jurislm/woodpecker-ci-plugin@latest"] });
+    }
+  });
+
   test("passes Agent Plugins manifest validation", async () => {
     await expect(validatePluginManifests()).resolves.toBeUndefined();
   });

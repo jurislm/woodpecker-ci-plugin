@@ -27,4 +27,4 @@ for name in ${(k)parameters}; do
       ;;
   esac
 done
-exec "$HOME/.bun/bin/bunx" -y @jurislm/woodpecker-ci-plugin@latest
+exec "$HOME/.bun/bin/bun" x @jurislm/woodpecker-ci-plugin@latest

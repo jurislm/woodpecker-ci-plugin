@@ -125,12 +125,12 @@ codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
         <details class="mcp-config">
           <summary>Use a direct MCP configuration</summary>
           <div class="config-content">
-            <p>For other MCP hosts, run the published package with <code>bunx</code> and set credentials in the MCP server environment. Do not commit credential values.</p>
+            <p>For other MCP hosts, run the published package with <code>bun x</code> and set credentials in the MCP server environment. Do not commit credential values.</p>
             <pre><code>{
   "mcpServers": {
     "woodpecker-ci": {
-      "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
+      "command": "bun",
+      "args": ["x", "@jurislm/woodpecker-ci-plugin@latest"],
       "env": {
         "WOODPECKER_URL": "https://ci.example.com/api",
         "WOODPECKER_API_TOKEN": "..."

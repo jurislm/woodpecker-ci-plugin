@@ -125,12 +125,12 @@ codex plugin add woodpecker-ci@woodpecker-ci-marketplace</code></pre>
         <details class="mcp-config">
           <summary>直接設定 MCP 伺服器</summary>
           <div class="config-content">
-            <p>其他 MCP 主機可使用 <code>bunx</code> 執行已發布的套件，並在 MCP 伺服器環境變數中設定憑證。請勿提交含有憑證的設定檔。</p>
+            <p>其他 MCP 主機可使用 <code>bun x</code> 執行已發布的套件，並在 MCP 伺服器環境變數中設定憑證。請勿提交含有憑證的設定檔。</p>
             <pre><code>{
   "mcpServers": {
     "woodpecker-ci": {
-      "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"],
+      "command": "bun",
+      "args": ["x", "@jurislm/woodpecker-ci-plugin@latest"],
       "env": {
         "WOODPECKER_URL": "https://ci.example.com/api",
         "WOODPECKER_API_TOKEN": "..."

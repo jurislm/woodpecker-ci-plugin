@@ -3,8 +3,8 @@
   "mcpServers": {
     "woodpecker-ci": {
       "type": "stdio",
-      "command": "bunx",
-      "args": ["-y", "@jurislm/woodpecker-ci-plugin@latest"]
+      "command": "bun",
+      "args": ["x", "@jurislm/woodpecker-ci-plugin@latest"]
     }
   }
 }

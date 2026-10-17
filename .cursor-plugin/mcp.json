@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "woodpecker-ci": {
-      "command": "bunx",
+      "command": "bun",
       "args": [
-        "-y",
+        "x",
         "@jurislm/woodpecker-ci-plugin@latest"
       ],
       "env": {

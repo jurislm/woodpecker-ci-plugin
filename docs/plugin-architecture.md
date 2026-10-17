@@ -40,7 +40,7 @@ pagination and partial-failure semantics, and binary/stream output behavior.
 Each local server ships `launchers/<provider>-desktop.zsh`. The host invokes it
 with `/bin/zsh -f`. It explicitly sources `${ZDOTDIR:-$HOME}/.zshenv`, suppresses
 startup stdout, preserves stderr, checks required credentials, and execs the
-absolute `$HOME/.bun/bin/bunx` path. Preflight startup syntax; reject syntax
+absolute `$HOME/.bun/bin/bun x` path. Preflight startup syntax; reject syntax
 errors and source status greater than 1. Status 1 may be a benign final
 optional-file guard; credential completeness still gates execution. Startup
 values may override inherited values, matching ordinary zsh source behavior.
@@ -51,7 +51,7 @@ variables. Hetzner also retains SSH_AUTH_SOCK. Fix PATH to
 Woodpecker's URL is supplied by the user MCP `env` setting or existing shell
 environment; the launcher does not parse global Codex configuration.
 
-Installing this launcher is opt-in. Keep the portable bunx manifest unchanged,
+Installing this launcher is opt-in. Keep the portable `bun x` manifest unchanged,
 disable only the selected plugin's bundled server, and use a user MCP
 registration with startup_timeout_sec=30. Keep skills enabled. Preserve
 unrelated plugin registrations and existing credential sources.

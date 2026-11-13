@@ -107,6 +107,7 @@ stop before the provider starts. No token is copied into Codex configuration.
 ```bash
 mkdir -p "$HOME/.codex/bin"
 cp launchers/woodpecker-desktop.zsh "$HOME/.codex/bin/woodpecker-mcp.zsh"
+cp launchers/validate-woodpecker-runtime.mjs "$HOME/.codex/bin/validate-woodpecker-runtime.mjs"
 ```
 
 Configure the absolute launcher path in `~/.codex/config.toml`, preserve your
@@ -126,8 +127,7 @@ WOODPECKER_URL = "https://ci.example.com/api"
 enabled = false
 ```
 
-The launcher requires Bun at `$HOME/.bun/bin/bun`, runs `bun x`, and continues to use
-`@latest`. Read `initialize.serverInfo.version` and match the intended release;
+The launcher requires Bun at `$HOME/.bun/bin/bun`, runs the validated [installed desktop runtime](#installed-desktop-runtime) with `--no-env-file --no-install`, without resolving `@latest`. Read `initialize.serverInfo.version` and match the intended release;
 a marketplace cache version is not the resolved running package version.
 `codex mcp get` reads a user registration; it does not prove a plugin-provided
 instance received that environment.
@@ -193,3 +193,14 @@ The configured API token is sent only as bearer authentication and is not
 included in logs or tool request metadata. Credential fields are removed from
 response schemas and tool results. Mutation requests are not retried
 automatically.
+
+
+### Installed desktop runtime
+
+The desktop launcher requires Bun 1.4.3 or newer and a complete normal installation at `~/.local/share/jurislm/mcp/woodpecker-ci-plugin`. Copy `launchers/woodpecker-desktop.zsh` and its owner-specific `launchers/validate-woodpecker-runtime.mjs` together to the same launcher directory. Keep the existing launcher destination and registration; do not change required-server or tool-approval settings.
+
+Prepare each installation or update in a separate staging directory with `bun add --exact @jurislm/woodpecker-ci-plugin@<approved-version>`, then verify `bun install --frozen-lockfile`. The installation's `package.json` and `bun.lock` are the only version authority. Startup validates the declared and resolved source, installed identity and binary path, then executes the installed entry with `--no-env-file --no-install`. It never resolves `@latest`, installs dependencies or loads a working-directory `.env`.
+
+For offline recovery, retain a verified released tarball inside the runtime, for example `artifacts/woodpecker-ci-plugin-<version>.tgz`, and declare `file:artifacts/woodpecker-ci-plugin-<version>.tgz`. A complete same-platform Bun dependency cache, including transitive dependencies, is required; a release tarball alone is insufficient. First run `bun install --offline` to generate the lock, then verify a clean `bun install --offline --frozen-lockfile` rebuild. Existing locked installations use the frozen command directly. Absolute or escaping tarball paths, mutable versions, identity mismatches and tarball SHA512 drift are rejected before startup.
+
+Before selecting a replacement, run the shipped validator against its staging directory with package name `@jurislm/woodpecker-ci-plugin` and binary name `woodpecker-ci-plugin`, verify published package contents, and perform an offline stdio initialize with dummy credentials. Move the verified complete directory to the runtime path only while this MCP is stopped. Keep the previous installation for rollback. Never copy credentials into the runtime. A successful standalone initialize is not evidence of a desktop reload or provider API access; verify those separately after deployment.

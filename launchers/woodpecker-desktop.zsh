@@ -27,4 +27,6 @@ for name in ${(k)parameters}; do
       ;;
   esac
 done
-exec "$HOME/.bun/bin/bun" x @jurislm/woodpecker-ci-plugin@latest
+runtime="$HOME/.local/share/jurislm/mcp/woodpecker-ci-plugin"
+"$HOME/.bun/bin/bun" --no-env-file --no-install "${${(%):-%x}:A:h}/validate-woodpecker-runtime.mjs" "$runtime" @jurislm/woodpecker-ci-plugin woodpecker-ci-plugin || exit $?
+exec "$HOME/.bun/bin/bun" --no-env-file --no-install "$runtime/node_modules/@jurislm/woodpecker-ci-plugin/dist/index.js"

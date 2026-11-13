@@ -8,6 +8,7 @@ const result = Bun.spawnSync([process.execPath, "pm", "pack", "--dry-run"], {
 if (result.exitCode !== 0) throw new Error(new TextDecoder().decode(result.stderr));
 const packed = parseBunPackOutput(new TextDecoder().decode(result.stdout) + new TextDecoder().decode(result.stderr));
 const paths = new Set(packed.paths);
+if (!paths.has("launchers/validate-woodpecker-runtime.mjs")) throw new Error("package is missing the desktop runtime validator");
 for (const path of [
   "dist/index.js",
   "launchers/woodpecker-desktop.zsh",

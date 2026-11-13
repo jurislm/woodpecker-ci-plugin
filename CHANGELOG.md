@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.1...v2.1.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* **desktop:** start a verified installed runtime offline ([#47](https://github.com/jurislm/woodpecker-ci-plugin/issues/47)) ([8fceeae](https://github.com/jurislm/woodpecker-ci-plugin/commit/8fceeae837ee76dbaa7594991d9daf2f260e2636))
+
 ## [2.1.1](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.0...v2.1.1) (2026-10-17)
 
 

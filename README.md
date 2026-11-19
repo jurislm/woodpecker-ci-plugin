@@ -143,10 +143,29 @@ packaging, configuration, release and acceptance rules.
 
 ## Cursor installation
 
-In Cursor, open Customize → Add Marketplace → Import from GitHub and enter
-`https://github.com/jurislm/woodpecker-ci-plugin`. Add Woodpecker CI Plugin,
-then use Configure to set `WOODPECKER_URL` and `WOODPECKER_API_TOKEN`. Cursor
-stores the values outside this repository.
+外掛參數（`WOODPECKER_URL`、`WOODPECKER_API_TOKEN`）改在 Cursor 管理頁 <https://cursor.com/dashboard/plugins> 的安裝欄位（Plugins → Configure）填寫，不需要再放進 `~/.config/jurislm/plugin.env`。外掛只在 `.cursor-plugin/plugin.json` 的 `variables` 宣告變數名稱，不含任何值；Cursor 會把你填的值代入 `mcp.json` 裡對應的 `${VAR}` 佔位符。
+
+- 匯入：在管理頁的 Plugins & MCPs 點 Add Marketplace，選 Import from Repo，貼上 `https://github.com/jurislm/woodpecker-ci-plugin`，再安裝外掛。
+- 欄位範例（假值，請換成自己的）：
+
+  ```text
+  WOODPECKER_URL       = https://ci.example.com/api
+  WOODPECKER_API_TOKEN = woodpecker-example-token-0000
+  ```
+
+驗證方式：
+
+1. 在新對話跑一個唯讀呼叫（例如列出 repositories 的工具）。回應成功代表值有傳進去；HTTP 401 表示值錯誤或已過期，缺值錯誤表示沒有傳進程序。
+2. 也可看新啟動的 MCP 程序的環境變數：值應為實際內容，而不是未代入的 `${VAR}` 佔位符。只檢查長度與是否以 `${` 開頭，不要把值貼到對話、Issue 或 PR。
+
+官方依據：[Cursor Plugins](https://cursor.com/docs/plugins)、[Plugins reference：Variables](https://cursor.com/docs/reference/plugins)。
+
+實測結果（官方文件未載明）：
+
+- 網頁管理頁的介面顯示為「Your Marketplaces」。
+- 欄位存好後不會回顯已存的值，確認方式請用下方的驗證。
+- 個人方案沒有 Refresh；要更新得先 Remove 再重新匯入。
+- 桌面 App 要用 ⌘Q 完全退出再開，才會讀到新值。
 
 ## Development
 

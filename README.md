@@ -160,6 +160,13 @@ packaging, configuration, release and acceptance rules.
 
 官方依據：[Cursor Plugins](https://cursor.com/docs/plugins)、[Plugins reference：Variables](https://cursor.com/docs/reference/plugins)。
 
+實測結果（官方文件未載明）：
+
+- 網頁管理頁的介面顯示為「Your Marketplaces」。
+- 欄位存好後不會回顯已存的值，確認方式請用下方的驗證。
+- 個人方案沒有 Refresh；要更新得先 Remove 再重新匯入。
+- 桌面 App 要用 ⌘Q 完全退出再開，才會讀到新值。
+
 ## Development
 
 ```bash

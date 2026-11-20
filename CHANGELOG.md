@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.2...v2.1.3) (2026-11-19)
+
+
+### Documentation
+
+* README 補上 Cursor 管理頁安裝欄位說明 ([#51](https://github.com/jurislm/woodpecker-ci-plugin/issues/51)) ([77a13b1](https://github.com/jurislm/woodpecker-ci-plugin/commit/77a13b14e5e11d6b29ab672ecd94178129d7cc8e))
+
 ## [2.1.2](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.1...v2.1.2) (2026-11-13)
 
 

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.3...v2.1.4) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ci:** isolate V6 verification prereleases from latest ([97d8561](https://github.com/jurislm/woodpecker-ci-plugin/commit/97d856178fb3308bb6009d5896890e9445b1488f))
+
 ## [2.1.3](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.2...v2.1.3) (2026-11-19)
 
 

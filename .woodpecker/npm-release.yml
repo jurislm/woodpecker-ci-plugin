@@ -8,6 +8,7 @@ steps:
     commands:
       - apk add --no-cache git zsh
       - bun install --frozen-lockfile
+      - bun scripts/ci/verification-release.ts prepare
       - bun run check
       - bun scripts/check-release-tag.ts
   - name: publish
@@ -19,4 +20,4 @@ steps:
       - apk add --no-cache git zsh
       - trap 'rm -f "$HOME/.npmrc"' EXIT
       - printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
-      - bun publish --access public
+      - bun scripts/ci/verification-release.ts publish

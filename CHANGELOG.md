@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.4...v2.1.5) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ci:** add isolated npm auth verification ([#49](https://github.com/jurislm/woodpecker-ci-plugin/issues/49)) ([825f856](https://github.com/jurislm/woodpecker-ci-plugin/commit/825f856c405f113b6f7f4d221e509444af5714a9))
+
 ## [2.1.4](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.3...v2.1.4) (2026-11-20)
 
 

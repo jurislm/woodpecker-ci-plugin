@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.5...v2.1.6) (2026-11-21)
+
+
+### Bug Fixes
+
+* **ci:** keep Release Please credential out of child arguments ([482e4a9](https://github.com/jurislm/woodpecker-ci-plugin/commit/482e4a9aa39ab0e7b303385d0d7bae38887d8dc5))
+* **ci:** resolve release repository by stable identity (JUR-1111) ([47b9b05](https://github.com/jurislm/woodpecker-ci-plugin/commit/47b9b05902ee3128ec20b6687c994e1f918870c0))
+
 ## [2.1.5](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.4...v2.1.5) (2026-11-20)
 
 

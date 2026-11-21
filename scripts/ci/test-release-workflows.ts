@@ -24,6 +24,8 @@ assert(release.when?.[0]?.branch === "main", "release must target main pushes");
 assert(release.steps?.[0]?.name === "github-release", "release must run github-release first");
 assert(release.steps?.[1]?.name === "release-pr", "release must run release-pr second");
 assert(release.steps?.[1]?.depends_on?.includes("github-release"), "release-pr must depend on github-release");
+assert(release.steps?.[0]?.commands?.[0] === "bun scripts/ci/run-release-please.ts github-release", "github-release must use the canonical launcher");
+assert(release.steps?.[1]?.commands?.[0] === "bun scripts/ci/run-release-please.ts release-pr", "release-pr must use the canonical launcher");
 assert(release.steps?.every((step: any) => !step.environment?.NPM_TOKEN), "release must not receive npm token");
 
 assert(autoMerge.when?.[0]?.event === "push", "auto-merge must trigger on push");

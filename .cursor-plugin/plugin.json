@@ -5,8 +5,8 @@
   "author": {
     "name": "JurisLM"
   },
-  "homepage": "https://jurislm.github.io/woodpecker-ci-plugin/",
-  "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "homepage": "https://r-seriesx.github.io/woodpecker-ci-plugin/",
+  "repository": "https://github.com/r-seriesx/woodpecker-ci-plugin",
   "license": "MIT",
   "keywords": [
     "woodpecker",

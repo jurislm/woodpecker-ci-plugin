@@ -5,10 +5,10 @@
   "description": "Manage Woodpecker CI through agent tools.",
   "author": {
     "name": "JurisLM",
-    "url": "https://github.com/jurislm"
+    "url": "https://github.com/r-seriesx"
   },
-  "homepage": "https://jurislm.github.io/woodpecker-ci-plugin/",
-  "repository": "https://github.com/jurislm/woodpecker-ci-plugin",
+  "homepage": "https://r-seriesx.github.io/woodpecker-ci-plugin/",
+  "repository": "https://github.com/r-seriesx/woodpecker-ci-plugin",
   "license": "MIT",
   "keywords": [
     "ci",
@@ -33,7 +33,7 @@
         ],
         "composerIcon": "./assets/woodpecker_ci.png",
         "logo": "./assets/woodpecker_ci.png",
-        "websiteURL": "https://jurislm.github.io/woodpecker-ci-plugin/"
+        "websiteURL": "https://r-seriesx.github.io/woodpecker-ci-plugin/"
       }
     }
   }

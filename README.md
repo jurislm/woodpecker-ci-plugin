@@ -3,7 +3,7 @@
 One Woodpecker CI guidance skill backed by a local stdio MCP server. The skill
 guides safe tool selection; the server exposes the Woodpecker API.
 
-Official website: https://jurislm.github.io/woodpecker-ci-plugin/
+Official website: https://r-seriesx.github.io/woodpecker-ci-plugin/
 
 ## Requirements
 
@@ -145,7 +145,7 @@ packaging, configuration, release and acceptance rules.
 
 外掛參數（`WOODPECKER_URL`、`WOODPECKER_API_TOKEN`）改在 Cursor 管理頁 <https://cursor.com/dashboard/plugins> 的安裝欄位（Plugins → Configure）填寫，不需要再放進 `~/.config/jurislm/plugin.env`。外掛只在 `.cursor-plugin/plugin.json` 的 `variables` 宣告變數名稱，不含任何值；Cursor 會把你填的值代入 `mcp.json` 裡對應的 `${VAR}` 佔位符。
 
-- 匯入：在管理頁的 Plugins & MCPs 點 Add Marketplace，選 Import from Repo，貼上 `https://github.com/jurislm/woodpecker-ci-plugin`，再安裝外掛。
+- 匯入：在管理頁的 Plugins & MCPs 點 Add Marketplace，選 Import from Repo，貼上 `https://github.com/r-seriesx/woodpecker-ci-plugin`，再安裝外掛。
 - 欄位範例（假值，請換成自己的）：
 
   ```text

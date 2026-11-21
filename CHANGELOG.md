@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.7](https://github.com/r-seriesx/woodpecker-ci-plugin/compare/v2.1.6...v2.1.7) (2026-11-21)
+
+
+### Documentation
+
+* update public links to r-seriesx (JUR-1111) ([#57](https://github.com/r-seriesx/woodpecker-ci-plugin/issues/57)) ([4bf86ea](https://github.com/r-seriesx/woodpecker-ci-plugin/commit/4bf86ea5decc3649fc8eca77e9a3b5be39a2c9ab))
+
 ## [2.1.6](https://github.com/jurislm/woodpecker-ci-plugin/compare/v2.1.5...v2.1.6) (2026-11-21)
 
 

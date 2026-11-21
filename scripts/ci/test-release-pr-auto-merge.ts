@@ -1,5 +1,7 @@
 #!/usr/bin/env bun
-import { runReleasePlease } from "./run-release-please";
+import { readFile, stat } from "node:fs/promises";
+import { dirname, isAbsolute } from "node:path";
+import { runReleasePlease, spawnReleasePlease } from "./run-release-please";
 import {
   runReleasePrAutoMerge,
   selectReleaseCandidate,
@@ -164,6 +166,8 @@ async function testMergeAndNoOp(): Promise<void> {
   for (const owner of ["jurislm", "r-seriesx"]) {
     const productionPath: string[] = [];
     const launcherArgs: string[][] = [];
+    const tokenPaths: string[] = [];
+    const marker = "synthetic-launcher-credential";
     const stub = Object.assign(async (input: Request | URL | string, init?: RequestInit) => {
       const url = new URL(String(input));
       assert(init?.redirect === "error", "requests must reject redirects");
@@ -175,17 +179,43 @@ async function testMergeAndNoOp(): Promise<void> {
     }, { preconnect: () => {} }) as typeof fetch;
     await runReleasePrAutoMerge({ token: "token", expectedBaseSha: BASE_SHA, fetchImpl: stub });
     for (const mode of ["github-release", "release-pr"]) {
-      await runReleasePlease(mode, "token", stub, async (args) => { launcherArgs.push(args); return 0; });
+      await runReleasePlease(mode, marker, stub, async (args) => {
+        const path = args[3]?.slice("--token=".length) ?? "";
+        assert(args[3]?.startsWith("--token=") && isAbsolute(path), "CLI token option must contain a plain path");
+        assert(args.every((arg) => !arg.includes(marker)), "credential must not be in CLI arguments");
+        assert((await stat(dirname(path))).mode % 0o1000 === 0o700, "credential directory must be private");
+        assert((await stat(path)).mode % 0o1000 === 0o600, "credential file must be private");
+        assert(await readFile(path, "utf8") === marker, "CLI must receive the original credential from the file");
+        tokenPaths.push(path);
+        launcherArgs.push(args);
+        return 0;
+      });
+      await expectRejects(() => stat(dirname(tokenPaths.at(-1)!)), "ENOENT");
     }
     assert(productionPath.length === 4, "expected metadata resolution before all consumers");
     for (const [index, mode] of ["github-release", "release-pr"].entries()) {
       const expectedArgs = [
-        "bunx", "release-please", mode, "--token=token",
+        "bunx", "release-please", mode, `--token=${tokenPaths[index]}`,
         `--repo-url=https://github.com/${owner}/woodpecker-ci-plugin`,
         "--target-branch=main", "--config-file=release-please-config.json", "--manifest-file=.release-please-manifest.json",
       ];
       assert(JSON.stringify(launcherArgs[index]) === JSON.stringify(expectedArgs), "must preserve CLI arguments and use canonical release URL");
     }
+    let failedDirectory = "";
+    await expectRejects(async () => {
+      try {
+        await runReleasePlease("github-release", marker, stub, async (args) => {
+          failedDirectory = dirname(args[3]!.slice("--token=".length));
+          throw new Error(marker);
+        });
+      } catch (error) {
+        assert(error instanceof Error && !error.message.includes(marker), "launcher must not report the raw child exception");
+        throw error;
+      }
+    }, "Release Please failed: github-release");
+    assert(failedDirectory !== "", "failure should have occurred after launching");
+    await expectRejects(() => stat(failedDirectory), "ENOENT");
+    assert(new Set(tokenPaths.map((path) => dirname(path))).size === tokenPaths.length, "each invocation must use a unique directory");
   }
   expectThrows(() => selectReleaseCandidate([candidate({ head: {
     ref: RELEASE_BRANCH, sha: HEAD_SHA, repo: { id: 999, full_name: "jurislm/woodpecker-ci-plugin" },
@@ -196,6 +226,22 @@ async function testMergeAndNoOp(): Promise<void> {
     "repository identity mismatch");
   await expectRejects(() => runReleasePlease("github-release", "token", wrong,
     async () => { throw new Error("must not launch"); }), "repository identity mismatch");
+
+  const marker = "synthetic-stdout-stderr-credential";
+  const logs: string[] = [];
+  const childMode = `const token = "synthetic-" + "stdout-stderr-credential"; console.log("out=" + token); console.error("err=" + token); process.exit(process.env.GITHUB_API_TOKEN ? 9 : 3)`;
+  const previous = process.env.GITHUB_API_TOKEN;
+  process.env.GITHUB_API_TOKEN = marker;
+  try {
+    const args = [process.execPath, "-e", childMode];
+    assert(args.every((arg) => !arg.includes(marker)), "probe must not put the synthetic credential in argv");
+    const code = await spawnReleasePlease(args, marker, (stdout, stderr) => logs.push(stdout, stderr));
+    assert(code === 3, "launcher must preserve exit status and must not forward the credential in the environment");
+    assert(logs[0]?.trim() === "out=[REDACTED]" && logs[1]?.trim() === "err=[REDACTED]", "launcher must redact both child streams");
+  } finally {
+    if (previous === undefined) delete process.env.GITHUB_API_TOKEN;
+    else process.env.GITHUB_API_TOKEN = previous;
+  }
 
   const noOp = await runReleasePrAutoMerge({ token: "token", expectedBaseSha: BASE_SHA, fetchImpl: fakeFetch([jsonResponse([])], []) });
   assert(noOp.status === "no-op", "missing release PR must be a no-op");

@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
+import { parseReleaseRepository, releaseRepoId } from "./release-repository";
 import { ciMetadataValue } from "./ci-metadata";
 
-const REPOSITORY = "jurislm/woodpecker-ci-plugin";
 const BASE_BRANCH = "main";
 const RELEASE_BRANCH = "release-please--branches--main--components--woodpecker-ci-plugin";
 const RELEASE_AUTHOR = "terry90918";
@@ -151,11 +151,11 @@ export function selectReleaseCandidate(
   if (user.login !== RELEASE_AUTHOR) throw new Error("release PR author is not allowed");
   const base = requiredRecord(pull.base, "base");
   const baseRepo = requiredRecord(base.repo, "base.repo");
-  if (baseRepo.full_name !== REPOSITORY) throw new Error("release PR base repository mismatch");
+  if (baseRepo.id !== releaseRepoId) throw new Error("release PR base repository mismatch");
   if (base.ref !== BASE_BRANCH) throw new Error("release PR base branch mismatch");
   const head = requiredRecord(pull.head, "head");
   const headRepo = requiredRecord(head.repo, "head.repo");
-  if (headRepo.full_name !== REPOSITORY) throw new Error("release PR head repository mismatch");
+  if (headRepo.id !== releaseRepoId) throw new Error("release PR head repository mismatch");
   if (head.ref !== RELEASE_BRANCH) throw new Error("release PR head branch mismatch");
   return {
     number: pull.number as number,
@@ -262,6 +262,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
     try {
       response = await fetchImpl(`${apiBaseUrl}${path}`, {
         ...init,
+        redirect: "error",
         signal,
         headers: {
           Accept: "application/vnd.github+json",
@@ -275,24 +276,26 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
       throw new Error(`GitHub API ${method} ${path.split("?")[0]} request failed`);
     }
     const text = await response.text();
-    if (!response.ok) throw new Error(`GitHub API ${method} ${path.split("?")[0]} failed with status ${response.status}`);
+    if (!response.ok || response.redirected) throw new Error(`GitHub API ${method} ${path.split("?")[0]} failed with status ${response.status}`);
     try { return JSON.parse(text) as unknown; } catch { throw new Error(`GitHub API ${method} ${path.split("?")[0]} did not return valid JSON`); }
   }
 
+  const repository = parseReleaseRepository(await githubRequest(`/repositories/${releaseRepoId}`));
+
   async function compareCommits(base: string, head: string): Promise<string> {
-    const value = requiredRecord(await githubRequest(`/repos/${REPOSITORY}/compare/${encodeURIComponent(base)}...${encodeURIComponent(head)}?per_page=1`), "commit comparison");
+    const value = requiredRecord(await githubRequest(`/repos/${repository.fullName}/compare/${encodeURIComponent(base)}...${encodeURIComponent(head)}?per_page=1`), "commit comparison");
     return requiredString(value.status, "commit comparison status");
   }
 
   async function mainSha(): Promise<string> {
-    const value = requiredRecord(await githubRequest(`/repos/${REPOSITORY}/git/ref/heads/${BASE_BRANCH}`), "base branch ref");
+    const value = requiredRecord(await githubRequest(`/repos/${repository.fullName}/git/ref/heads/${BASE_BRANCH}`), "base branch ref");
     return requiredString(requiredRecord(value.object, "base branch ref.object").sha, "base branch ref.object.sha");
   }
 
   async function waitForRequiredChecks(commit: string): Promise<void> {
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       const value = requiredRecord(
-        await githubRequest(`/repos/${REPOSITORY}/commits/${encodeURIComponent(commit)}/status`),
+        await githubRequest(`/repos/${repository.fullName}/commits/${encodeURIComponent(commit)}/status`),
         "commit status",
       );
       const statuses = value.statuses;
@@ -319,14 +322,14 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
   }
 
   const candidatePullNumber = options.candidatePullNumber;
-  const query = new URLSearchParams({ state: "open", base: BASE_BRANCH, head: `jurislm:${RELEASE_BRANCH}`, per_page: "100" });
+  const query = new URLSearchParams({ state: "open", base: BASE_BRANCH, head: `${repository.owner}:${RELEASE_BRANCH}`, per_page: "100" });
   const candidateValue = candidatePullNumber === undefined
-    ? await githubRequest(`/repos/${REPOSITORY}/pulls?${query.toString()}`)
-    : [await githubRequest(`/repos/${REPOSITORY}/pulls/${candidatePullNumber}`)];
+    ? await githubRequest(`/repos/${repository.fullName}/pulls?${query.toString()}`)
+    : [await githubRequest(`/repos/${repository.fullName}/pulls/${candidatePullNumber}`)];
   const candidate = selectReleaseCandidate(candidateValue, { allowClosed: options.dryRun && candidatePullNumber !== undefined });
   if (!candidate) { logger.log("No open release-please Release PR found; nothing to merge."); return { status: "no-op" }; }
 
-  const detailValue = await githubRequest(`/repos/${REPOSITORY}/pulls/${candidate.number}`);
+  const detailValue = await githubRequest(`/repos/${repository.fullName}/pulls/${candidate.number}`);
   let detail = selectReleaseCandidate([detailValue], { allowClosed: options.dryRun && candidatePullNumber !== undefined });
   if (!detail || detail.headSha !== candidate.headSha || detail.baseSha !== candidate.baseSha) throw new Error("release PR changed before content validation");
   let detailRecord = requiredRecord(detailValue, "pull request detail");
@@ -336,15 +339,16 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
     if (relation !== "behind") {
       throw new Error(`release PR base SHA does not match CI commit (pr=${detail.baseSha}, ci=${options.expectedBaseSha}, relation=${relation})`);
     }
+    if (await mainSha() !== options.expectedBaseSha) { logger.log("main advanced before branch update; yielding to newer build."); return { status: "no-op" }; }
     logger.log(`Release PR #${detail.number} base is behind ${options.expectedBaseSha}; updating its branch.`);
-    await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}/update-branch`, {
+    await githubRequest(`/repos/${repository.fullName}/pulls/${detail.number}/update-branch`, {
       method: "PUT",
       body: JSON.stringify({ expected_head_sha: detail.headSha }),
     });
     let updated: { candidate: ReleaseCandidate; record: Record<string, unknown> } | null = null;
     for (let attempt = 1; attempt <= maxAttempts && !updated; attempt += 1) {
       if (attempt > 1) await sleep(pollDelayMs);
-      const value = await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}`);
+      const value = await githubRequest(`/repos/${repository.fullName}/pulls/${detail.number}`);
       const current = selectReleaseCandidate([value]);
       if (!current || current.number !== detail.number) throw new Error("release PR changed during branch update");
       if (current.headSha !== detail.headSha) updated = { candidate: current, record: requiredRecord(value, "pull request detail") };
@@ -362,7 +366,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
   if (!Number.isSafeInteger(changedFileCount) || (changedFileCount as number) <= 0 || (changedFileCount as number) > 3000) throw new Error("invalid release PR shape: changed_files");
   const changedFiles: unknown[] = [];
   for (let page = 1; changedFiles.length < (changedFileCount as number); page += 1) {
-    const value = await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}/files?per_page=100&page=${page}`);
+    const value = await githubRequest(`/repos/${repository.fullName}/pulls/${detail.number}/files?per_page=100&page=${page}`);
     if (!Array.isArray(value) || value.length === 0 || value.length > 100) throw new Error("release PR files pagination is incomplete");
     changedFiles.push(...value);
   }
@@ -370,7 +374,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
   validateChangedFiles(changedFiles);
 
   async function getFile(path: string, ref: string): Promise<string> {
-    return contentText(await githubRequest(`/repos/${REPOSITORY}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(ref)}`), `${path}@${ref}`);
+    return contentText(await githubRequest(`/repos/${repository.fullName}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(ref)}`), `${path}@${ref}`);
   }
   const files = await Promise.all([
     getFile(".release-please-manifest.json", detail.baseSha), getFile(".release-please-manifest.json", detail.headSha),
@@ -392,7 +396,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
 
   let mergeable = false;
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const currentValue = await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}`);
+    const currentValue = await githubRequest(`/repos/${repository.fullName}/pulls/${detail.number}`);
     const current = selectReleaseCandidate([currentValue]);
     if (!current || current.headSha !== detail.headSha || current.baseSha !== detail.baseSha) throw new Error("release PR changed during mergeability check");
     const mergeableValue = requiredRecord(currentValue, "pull request detail").mergeable;
@@ -404,7 +408,7 @@ export async function runReleasePrAutoMerge(options: AutoMergeOptions): Promise<
   if (!mergeable) throw new Error("release PR mergeability check timed out");
   if (await mainSha() !== options.expectedBaseSha) { logger.log("main advanced during validation; yielding to newer build."); return { status: "no-op" }; }
 
-  const merged = requiredRecord(await githubRequest(`/repos/${REPOSITORY}/pulls/${detail.number}/merge`, {
+  const merged = requiredRecord(await githubRequest(`/repos/${repository.fullName}/pulls/${detail.number}/merge`, {
     method: "PUT",
     body: JSON.stringify({ sha: detail.headSha, merge_method: "merge" }),
   }), "merge response");

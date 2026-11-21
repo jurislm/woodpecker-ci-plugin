@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { runReleasePlease } from "./run-release-please";
 import {
   runReleasePrAutoMerge,
   selectReleaseCandidate,
@@ -46,8 +47,8 @@ function candidate(overrides: Record<string, unknown> = {}): Record<string, unkn
     body: RELEASE_BODY,
     changed_files: 5,
     user: { login: "terry90918" },
-    base: { ref: "main", sha: BASE_SHA, repo: { full_name: "jurislm/woodpecker-ci-plugin" } },
-    head: { ref: RELEASE_BRANCH, sha: HEAD_SHA, repo: { full_name: "jurislm/woodpecker-ci-plugin" } },
+    base: { ref: "main", sha: BASE_SHA, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } },
+    head: { ref: RELEASE_BRANCH, sha: HEAD_SHA, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } },
     ...overrides,
   };
 }
@@ -93,9 +94,19 @@ function contentResponse(text: string): Response {
   return jsonResponse({ type: "file", encoding: "base64", content: Buffer.from(text).toString("base64") });
 }
 
+function releaseRepository(owner = "jurislm") {
+  return {
+    id: 1372674879, name: "woodpecker-ci-plugin", full_name: `${owner}/woodpecker-ci-plugin`,
+    default_branch: "main", fork: false, owner: { id: 273012487, type: "Organization", login: owner },
+  };
+}
+
 function fakeFetch(responses: Response[], requests: Request[]): typeof fetch {
   return Object.assign(async (input: string | URL | Request, init?: RequestInit) => {
-    requests.push(new Request(input, init));
+    const request = new Request(input, init);
+    if (new URL(request.url).pathname === "/repositories/1372674879")
+      return jsonResponse(releaseRepository());
+    requests.push(request);
     const response = responses.shift();
     if (!response) throw new Error("unexpected request");
     return response;
@@ -150,6 +161,42 @@ async function testMergeAndNoOp(): Promise<void> {
   assert(body.sha === HEAD_SHA && body.merge_method === "merge", "merge must pin head SHA and method");
   assert(!JSON.stringify(requests).includes("must-not-log"), "token must not leak into request assertions");
 
+  for (const owner of ["jurislm", "r-seriesx"]) {
+    const productionPath: string[] = [];
+    const launcherArgs: string[][] = [];
+    const stub = Object.assign(async (input: Request | URL | string, init?: RequestInit) => {
+      const url = new URL(String(input));
+      assert(init?.redirect === "error", "requests must reject redirects");
+      productionPath.push(url.pathname);
+      if (url.pathname === "/repositories/1372674879") return jsonResponse(releaseRepository(owner));
+      assert(url.pathname === `/repos/${owner}/woodpecker-ci-plugin/pulls`, "must use canonical pull path");
+      assert(url.searchParams.get("head") === `${owner}:${RELEASE_BRANCH}`, "must use canonical head owner");
+      return jsonResponse([]);
+    }, { preconnect: () => {} }) as typeof fetch;
+    await runReleasePrAutoMerge({ token: "token", expectedBaseSha: BASE_SHA, fetchImpl: stub });
+    for (const mode of ["github-release", "release-pr"]) {
+      await runReleasePlease(mode, "token", stub, async (args) => { launcherArgs.push(args); return 0; });
+    }
+    assert(productionPath.length === 4, "expected metadata resolution before all consumers");
+    for (const [index, mode] of ["github-release", "release-pr"].entries()) {
+      const expectedArgs = [
+        "bunx", "release-please", mode, "--token=token",
+        `--repo-url=https://github.com/${owner}/woodpecker-ci-plugin`,
+        "--target-branch=main", "--config-file=release-please-config.json", "--manifest-file=.release-please-manifest.json",
+      ];
+      assert(JSON.stringify(launcherArgs[index]) === JSON.stringify(expectedArgs), "must preserve CLI arguments and use canonical release URL");
+    }
+  }
+  expectThrows(() => selectReleaseCandidate([candidate({ head: {
+    ref: RELEASE_BRANCH, sha: HEAD_SHA, repo: { id: 999, full_name: "jurislm/woodpecker-ci-plugin" },
+  } })]), "head repository mismatch");
+  const wrong = Object.assign(async () => jsonResponse({ ...releaseRepository(), id: 999 }),
+    { preconnect: () => {} }) as typeof fetch;
+  await expectRejects(() => runReleasePrAutoMerge({ token: "token", expectedBaseSha: BASE_SHA, fetchImpl: wrong }),
+    "repository identity mismatch");
+  await expectRejects(() => runReleasePlease("github-release", "token", wrong,
+    async () => { throw new Error("must not launch"); }), "repository identity mismatch");
+
   const noOp = await runReleasePrAutoMerge({ token: "token", expectedBaseSha: BASE_SHA, fetchImpl: fakeFetch([jsonResponse([])], []) });
   assert(noOp.status === "no-op", "missing release PR must be a no-op");
 }
@@ -178,8 +225,8 @@ async function testFailureGuards(): Promise<void> {
       token: "token",
       expectedBaseSha: "newer-ci-sha",
       fetchImpl: fakeFetch([
-        jsonResponse([candidate({ base: { ref: "main", sha: BASE_SHA, repo: { full_name: "jurislm/woodpecker-ci-plugin" } } })]),
-        jsonResponse(candidate({ base: { ref: "main", sha: BASE_SHA, repo: { full_name: "jurislm/woodpecker-ci-plugin" } } })),
+        jsonResponse([candidate({ base: { ref: "main", sha: BASE_SHA, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } } })]),
+        jsonResponse(candidate({ base: { ref: "main", sha: BASE_SHA, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } } })),
         jsonResponse({ status: "diverged" }),
       ], staleRequests),
     }),
@@ -279,6 +326,7 @@ interface FakeRepoOptions {
   compareStatus?: string;
   update?: { headSha: string; baseSha: string } | "never";
   mainSha?: string;
+  mainShaAfterUpdate?: string;
   files?: Array<{ filename: string; status: string }>;
   pendingStatusPolls?: number;
 }
@@ -289,8 +337,8 @@ function fakeRepo(options: FakeRepoOptions = {}) {
   const prBaseSha = options.prBaseSha ?? BASE_SHA;
   const withRefs = (baseSha: string, headSha: string) => candidate({
     changed_files: (options.files ?? validFiles()).length,
-    base: { ref: "main", sha: baseSha, repo: { full_name: "jurislm/woodpecker-ci-plugin" } },
-    head: { ref: RELEASE_BRANCH, sha: headSha, repo: { full_name: "jurislm/woodpecker-ci-plugin" } },
+    base: { ref: "main", sha: baseSha, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } },
+    head: { ref: RELEASE_BRANCH, sha: headSha, repo: { id: 1372674879, full_name: "jurislm/woodpecker-ci-plugin" } },
   });
   let current = withRefs(prBaseSha, HEAD_SHA);
   let statusPolls = 0;
@@ -307,6 +355,7 @@ function fakeRepo(options: FakeRepoOptions = {}) {
     const method = init?.method ?? "GET";
     const path = url.pathname.replace("/repos/jurislm/woodpecker-ci-plugin", "");
     const body = typeof init?.body === "string" ? init.body : "";
+    if (path === "/repositories/1372674879") return jsonResponse(releaseRepository());
     requests.push({ method, path, body });
     const head = (current.head as { sha: string }).sha;
     if (method === "GET" && path === "/pulls") return jsonResponse([current]);
@@ -328,7 +377,7 @@ function fakeRepo(options: FakeRepoOptions = {}) {
       statusPolls += 1;
       return jsonResponse(statusPolls <= (options.pendingStatusPolls ?? 0) ? PENDING_STATUS : GREEN_STATUS);
     }
-    if (method === "GET" && path === "/git/ref/heads/main") return jsonResponse({ object: { sha: options.mainSha ?? prBaseSha } });
+    if (method === "GET" && path === "/git/ref/heads/main") return jsonResponse({ object: { sha: (head !== HEAD_SHA ? options.mainShaAfterUpdate : undefined) ?? options.mainSha ?? prBaseSha } });
     if (method === "PUT" && path === "/pulls/10/merge") return jsonResponse({ merged: true, sha: "merge-sha" });
     return jsonResponse({}, 404);
   }, { preconnect: () => {} }) as typeof fetch;
@@ -357,9 +406,13 @@ async function testBehindReleasePr(): Promise<void> {
   await expectRejects(() => run(stuck, 3), "branch update");
   assert(stuck.merges().length === 0, "release PR must not merge when the branch update never lands");
 
-  const raced = fakeRepo({ mainSha: "newer-main-sha", update: { headSha: NEW_HEAD_SHA, baseSha: "newer-main-sha" } });
+  const stale = fakeRepo({ mainSha: "newer-main-sha", update: { headSha: NEW_HEAD_SHA, baseSha: "newer-main-sha" } });
+  const staleResult = await run(stale);
+  assert(staleResult.status === "no-op" && stale.updates().length === 0 && stale.merges().length === 0, "an already stale build must not update or merge");
+
+  const raced = fakeRepo({ mainSha: CI_SHA, mainShaAfterUpdate: "newer-main-sha", update: { headSha: NEW_HEAD_SHA, baseSha: "newer-main-sha" } });
   const racedResult = await run(raced);
-  assert(racedResult.status === "no-op" && raced.merges().length === 0, "main advancing during the update must yield");
+  assert(racedResult.status === "no-op" && raced.updates().length === 1 && raced.merges().length === 0, "main advancing during the update must yield");
 
   const extraFile = fakeRepo({
     mainSha: CI_SHA,
